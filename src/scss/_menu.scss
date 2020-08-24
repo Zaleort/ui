@@ -1,0 +1,112 @@
+@include block(menu) {
+  display: flex;
+  background-color: $white;
+  
+  @include modifier(vertical) {
+    flex-direction: column;
+    padding: 16px 0;
+    height: 100%;
+    overflow: auto;
+    border-right: 1px solid $border-color;
+
+    @if ($is-shadowed) {
+      box-shadow: $low-shadow;
+    }
+
+    & .iu-menu-item {
+      border-bottom: 1px solid $grey200;
+    }
+
+    & .iu-menu-item:last-child {
+      border-bottom: none;
+    }
+  }
+
+  @include modifier(horizontal) {
+    flex-direction: row;
+
+    & .iu-menu-item {
+      border-right: 1px solid $grey200;
+    }
+
+    & .iu-menu-item:last-child {
+      border-right: none;
+    }
+  }
+
+  @include when(hamburger) {
+    position: relative;
+    transition: transform 250ms ease-in-out;
+    width: $menu-hamburger-width;
+    transform: translateX(-100%);
+
+    @if ($topbar-height) {
+      padding-top: $topbar-height + 16px;
+
+      @include desktop {
+        padding-top: 16px;
+      }
+    }
+
+    @include when(visible) {
+      transform: translateX(0);
+    }
+  }
+
+  @include element(mask) {
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 250ms ease, visibility 250ms ease, width 250ms ease-in-out;
+
+    @include desktop {
+      position: static;
+      opacity: 1;
+      width: 0;
+      visibility: visible;
+      max-width: 300px;
+    }
+
+    @include when(visible) {
+      opacity: 1;
+      width: 100%;
+      visibility: visible;
+
+      @include desktop {
+        width: $menu-hamburger-width;
+      }
+    }
+  }
+
+  @include element(collapse) {
+    cursor: pointer;
+    padding: 7px 12px;
+    margin-top: auto;
+  }
+}
+
+@include block(menu-item) {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 7px 12px;
+  transition: all 120ms ease;
+
+  &:hover,
+  &:focus {
+    outline: none;
+    background: $primary;
+    color: $white;
+  }
+
+  @include when(disabled) {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+}

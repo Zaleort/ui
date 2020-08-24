@@ -1,0 +1,56 @@
+@include block(switch) {
+  cursor: pointer;
+  display: inline-flex;
+  user-select: none;
+
+  @include element(input) {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 18px;
+    background-color: $grey400;
+    border-radius: 50px;
+    transition: all 100ms ease;
+
+    &::after {
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      content: ' ';
+      width: 14px;
+      height: 14px;
+      background-color: $white;
+      transition: all 100ms ease-out;
+      border-radius: 100%;
+    }
+
+    @include when(disabled) {
+      background-color: $grey300;
+    }
+
+    @include when(checked) {
+      background-color: $primary;
+
+      &::after {
+        transform: translateX(22px) rotateZ(180deg);
+      }
+
+      @include when(disabled) {
+        background-color: $primary300;
+      }
+    }
+  }
+
+  @include element(original) {
+    visibility: hidden;
+  }
+
+  @include element(label) {
+    margin-left: 5px;
+  }
+
+  @include when(disabled) {
+    cursor: not-allowed;
+    color: $grey500;
+  }
+}

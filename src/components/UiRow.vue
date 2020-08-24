@@ -1,0 +1,44 @@
+<script lang="ts">
+import { defineComponent, h } from 'vue';
+
+export default defineComponent({
+  name: 'UiRow',
+  provide() {
+    return {
+      gutter: this.gutter,
+    };
+  },
+
+  props: {
+    tag: {
+      type: String,
+      default: 'div',
+    },
+
+    justify: {
+      type: String,
+      default: 'flex-start',
+    },
+
+    align: {
+      type: String,
+      default: 'center',
+    },
+
+    gutter: {
+      type: Number,
+      default: 10,
+    },
+  },
+
+  render() {
+    return h(this.tag, {
+      class: [
+        'ui-row',
+        `ui-row--${this.justify}`,
+        `ui-row--${this.align}`,
+      ],
+    }, this.$slots.default ? this.$slots.default() : []);
+  },
+});
+</script>

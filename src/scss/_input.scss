@@ -1,0 +1,69 @@
+@include block(input) {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  transition: all 90ms ease-in;
+  background-color: $white;
+  border: 1px solid $border-color;
+  width: 100%;
+
+  @if $is-rounded {
+    border-radius: $radius;
+  }
+
+  &:hover {
+    border-color: $grey600;
+    transition-timing-function: ease-out;
+  }
+
+  @include when(focus) {
+    border-color: $primary;
+  }
+
+  @include when(disabled) {
+    color: $grey600;
+    background-color: $grey50;
+    border: 1px solid $border-color;
+  }
+
+  @include when(readonly) {
+    color: $grey600;
+    border: 1px solid $border-color;
+  }
+
+  @include element(inner) {
+    flex: 1;
+    padding: 7px 9px;
+    border: none;
+  
+    &:focus {
+      outline: none;
+    }
+
+    @include when(disabled) {
+      color: $grey600;
+      cursor: not-allowed;
+    }
+  
+    @include when(readonly) {
+      color: $grey600;
+      cursor: initial;
+    }
+
+    @include modifier(small) {
+      padding: 3px 9px;
+    }
+
+    @include modifier(large) {
+      padding: 11px 9px;
+    }
+  }
+
+  @include element(prepend) {
+    padding-left: 9px;
+  }
+
+  @include element(append) {
+    padding-right: 9px;
+  }
+}

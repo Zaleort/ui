@@ -1,0 +1,6 @@
+@include block(main) {
+  display: block;
+  flex: 1;
+  padding: 1em;
+  overflow: auto;
+}

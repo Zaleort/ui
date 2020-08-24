@@ -1,0 +1,38 @@
+@include block(tabs) {
+  background-color: $white;
+  border: 1px solid $border-color;
+
+  @if ($is-rounded) {
+    border-radius: $radius;
+  }
+
+  @if($is-shadowed) {
+    box-shadow: $low-shadow;
+  }
+
+  @include element(nav) {
+    border-bottom: 1px solid $border-color;
+    margin-bottom: 1em;
+
+    @include element(tab) {
+      display: inline-block;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: all 90ms ease;
+      color: $text-secondary-color;
+      font-weight: 500;
+
+      &:hover {
+        color: $primary;
+      }
+
+      @include when(active) {
+        color: $primary;
+      }
+    }
+  }
+
+  @include element(panel) {
+    padding: 12px;
+  }
+}

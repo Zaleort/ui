@@ -1,0 +1,258 @@
+@import './mixins/functions';
+// 
+// Colores
+//
+
+// Rojo
+$red50: #ffebee;
+$red100: #ffcdd2;
+$red200: #ef9a9a;
+$red300: #e57373;
+$red400: #ef5350;
+$red500: #f44336;
+$red600: #e53935;
+$red700: #d32f2f;
+$red800: #c62828;
+$red900: #b71c1c;
+
+// Rosas
+$pink50: #fce4ec;
+$pink100: #f8bbd0;
+$pink200: #f48fb1;
+$pink300: #f06292;
+$pink400: #ec407a;
+$pink500: #e91e63;
+$pink600: #d81b60;
+$pink700: #c2185b;
+$pink800: #ad1457;
+$pink900: #880e4f;
+
+// Morados
+$purple50: #F3E5F5;
+$purple100: #E1BEE7;
+$purple200: #CE93D8;
+$purple300: #BA68C8;
+$purple400: #AB47BC;
+$purple500: #9C27B0;
+$purple600: #8E24AA;
+$purple700: #7B1FA2;
+$purple800: #6A1B9A;
+$purple900: #4A148C;
+
+// Indigo
+$indigo50: #e8eaf6;
+$indigo100: #c5cae9;
+$indigo200: #9fa8da;
+$indigo300: #7986cb;
+$indigo400: #5c6bc0;
+$indigo500: #3f51b5;
+$indigo600: #3949ab;
+$indigo700: #303f9f;
+$indigo800: #283593;
+$indigo900: #1a237e;
+
+// Blue
+$blue50: #E3F2FD;
+$blue100: #BBDEFB;
+$blue200: #90CAF9;
+$blue300: #64B5F6;
+$blue400: #42A5F5;
+$blue500: #2196F3;
+$blue600: #1E88E5;
+$blue700: #1976D2;
+$blue800: #1565C0;
+$blue900: #0D47A1;
+
+// Cyan
+$cyan50: #E0F7FA;
+$cyan100: #B2EBF2;
+$cyan200: #80DEEA;
+$cyan300: #4DD0E1;
+$cyan400: #26C6DA;
+$cyan500: #00BCD4;
+$cyan600: #00ACC1;
+$cyan700: #0097A7;
+$cyan800: #00838F;
+$cyan900: #006064;
+
+// Teal
+$teal50: #e0f2f1;
+$teal200: #80cbc4;
+$teal300: #4db6ac;
+$teal400: #26a69a;
+$teal500: #009688;
+$teal600: #00897b;
+$teal700: #00796b;
+$teal800: #00695c;
+$teal900: #004d40;
+
+// Green
+$green50: #E8F5E9;
+$green100: #C8E6C9;
+$green200: #A5D6A7;
+$green300: #81C784;
+$green400: #66BB6A;
+$green500: #4CAF50;
+$green600: #43A047;
+$green700: #388E3C;
+$green800: #2E7D32;
+$green900: #1B5E20;
+
+// Yellow
+$yellow50: #FFFDE7;
+$yellow100: #FFF9C4;
+$yellow200: #FFF59D;
+$yellow300: #FFF176;
+$yellow400: #FFEE58;
+$yellow500: #FFEB3B;
+$yellow600: #FDD835;
+$yellow700: #FBC02D;
+$yellow800: #F9A825;
+$yellow900: #F57F17;
+
+// Orange
+$orange50: #FFF3E0;
+$orange100: #FFE0B2;
+$orange200: #FFCC80;
+$orange300: #FFB74D;
+$orange400: #FFA726;
+$orange500: #FF9800;
+$orange600: #FB8C00;
+$orange700: #F57C00;
+$orange800: #EF6C00;
+$orange900: #E65100;
+
+// Deep Orange
+$dorange50: #FBE9E7;
+$dorange100: #FFCCBC;
+$dorange200: #FFAB91;
+$dorange300: #FF8A65;
+$dorange400: #FF7043;
+$dorange500: #FF5722;
+$dorange600: #F4511E;
+$dorange700: #E64A19;
+$dorange800: #D84315;
+$dorange900: #BF360C;
+
+// Marrones
+$brown50: #EFEBE9;
+$brown100: #D7CCC8;
+$brown200: #BCAAA4;
+$brown300: #A1887F;
+$brown400: #8D6E63;
+$brown500: #795548;
+$brown600: #6D4C41;
+$brown700: #5D4037;
+$brown800: #4E342E;
+$brown900: #3E2723;
+
+// Gris azulado
+$bluegrey50: #ECEFF1;
+$bluegrey100: #CFD8DC;
+$bluegrey200: #B0BEC5;
+$bluegrey300: #90A4AE;
+$bluegrey400: #78909C;
+$bluegrey500: #607D8B;
+$bluegrey600: #546E7A;
+$bluegrey700: #455A64;
+$bluegrey800: #37474F;
+$bluegrey900: #263238;
+
+// Escala de grises
+$white: #ffffff;
+$grey50: #fafafa;
+$grey100: #f5f5f5;
+$grey200: #eeeeee;
+$grey300: #e0e0e0;
+$grey400: #bdbdbd;
+$grey500: #9e9e9e;
+$grey600: #757575;
+$grey700: #616161;
+$grey800: #424242;
+$grey900: #212121;
+$black: #000000;
+
+// Primary
+$primary: $blue500 !default;
+$primary50: tint($primary, 90%) !default;
+$primary100: tint($primary, 70%) !default;
+$primary200: tint($primary, 50%) !default;
+$primary300: tint($primary, 30%) !default;
+$primary400: tint($primary, 10%) !default;
+$primary500: shade($primary, 10%) !default;
+$primary600: shade($primary, 20%) !default;
+$primary700: shade($primary, 30%) !default;
+$primary800: shade($primary, 40%) !default;
+$primary900: shade($primary, 50%) !default;
+
+// Secondary
+$secondary: $pink500 !default;
+$secondary50: tint($secondary, 90%) !default;
+$secondary100: tint($secondary, 70%) !default;
+$secondary200: tint($secondary, 50%) !default;
+$secondary300: tint($secondary, 30%) !default;
+$secondary400: tint($secondary, 10%) !default;
+$secondary500: shade($secondary, 10%) !default;
+$secondary600: shade($secondary, 20%) !default;
+$secondary700: shade($secondary, 30%) !default;
+$secondary800: shade($secondary, 40%) !default;
+$secondary900: shade($secondary, 50%) !default;
+
+// Success
+$success-light: $green50 !default;
+$success: $green500 !default;
+$success-dark: $green700 !default;
+
+// Warning
+$warning-light: $orange50 !default;
+$warning: $orange500 !default;
+$warning-dark: $orange700 !default;
+
+// Danger
+$danger-light: $red50 !default;
+$danger: $red500 !default;
+$danger-dark: $red700 !default;
+
+// Info
+$info-light: $blue50 !default;
+$info: $blue500 !default;
+$info-dark: $blue700 !default;
+
+// Common color
+$text-color: $grey800 !default;
+$text-secondary-color: $grey500 !default;
+$border-color: $grey300 !default;
+$background-color: $grey50 !default;
+
+// Fonts
+$font-size: 16px !default;
+$font-family: sans-serif !default;
+
+// Border radius
+$is-rounded: true !default;
+$radius: 3px !default;
+
+// Shadows
+$is-shadowed: true !default;
+$low-shadow: 
+  0 3px 4px 0 rgba(0, 0, 0, 0.15),
+  0 6px 12px 0 rgba(0, 0, 0, 0.10) !default;
+$med-shadow: 
+  0 6px 8px 0 rgba(0, 0, 0, 0.18),
+  0 10px 20px 0 rgba(0, 0, 0, 0.13) !default;
+$high-shadow: 
+  0 12px 16px 0 rgba(0, 0, 0, 0.21),
+  0 14px 28px 0 rgba(0, 0, 0, 0.16) !default;
+
+$topbar-height: 50px !default;
+$menu-hamburger-width: 250px;
+
+// Breakpoints
+$mobile: 320px;
+$mobile-l: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+$desktop-l: 1200px;
+$desktop-xl: 1400px;
+
+@import './mixins/mixins';

@@ -1,0 +1,82 @@
+@include block(col) {
+  display: block;
+  flex-shrink: 1;
+
+  @include modifier(grow) {
+    flex-grow: 1;
+  }
+}
+
+@for $i from 0 through 24 {
+  .ui-col-#{$i} {
+    width: (1 / 24 * $i * 100) * 1%;
+  }
+}
+
+@include mobile {
+  .ui-col-m-0 {
+    display: none;
+  }
+  
+  @for $i from 0 through 24 {
+    .ui-col-m-#{$i} {
+      width: (1 / 24 * $i * 100) * 1%;
+    }
+  }
+}
+
+@include mobile-l {
+  .ui-col-ml-0 {
+    display: none;
+  }
+  @for $i from 0 through 24 {
+    .ui-col-ml-#{$i} {
+      width: (1 / 24 * $i * 100) * 1%;
+    }
+  }
+}
+
+@include tablet {
+  .ui-col-t-0 {
+    display: none;
+  }
+  @for $i from 0 through 24 {
+    .ui-col-t-#{$i} {
+      width: (1 / 24 * $i * 100) * 1%;
+    }
+  }
+}
+
+@include desktop {
+  .ui-col-d-0 {
+    display: none;
+  }
+  @for $i from 0 through 24 {
+    .ui-col-d-#{$i} {
+      width: (1 / 24 * $i * 100) * 1%;
+    }
+  }
+}
+
+@include desktop-l {
+  .ui-col-dl-0 {
+    display: none;
+  }
+  @for $i from 0 through 24 {
+    .ui-col-dl-#{$i} {
+      width: (1 / 24 * $i * 100) * 1%;
+    }
+  }
+}
+
+@include desktop-xl {
+  .ui-col-dxl-0 {
+    display: none;
+  }
+
+  @for $i from 0 through 24 {
+    .ui-col-dxl-#{$i} {
+      width: (1 / 24 * $i * 100) * 1%;
+    }
+  }
+}

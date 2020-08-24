@@ -1,0 +1,93 @@
+// Text align
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.vertical-align { vertical-align: middle; }
+
+// Cursor
+.clickable { cursor: pointer; }
+.not-clickable { cursor: unset; }
+
+// Border
+.border-none { border: none; }
+.border-top { border-top: 1px solid $border-color; }
+.border-bottom { border-bottom: 1px solid $border-color; }
+.border-left { border-left: 1px solid $border-color; }
+.border-right { border-right: 1px solid $border-color; }
+.border { border: 1px solid $border-color; }
+
+.rounded { border-radius: 3px; }
+
+// Float
+.float-right { float: right; }
+.float-left { float: left; }
+
+// Width
+.width-100, .block { width: 100%; }
+.width-75 { width: 75%; }
+.width-50 { width: 50%; }
+.width-33 { width: 33%; }
+.width-25 { width: 25%; }
+
+// Margin y padding
+@for $i from 0 through 5 {
+  .m-#{$i} { margin: $i * 3px; }
+  .mt-#{$i} { margin-top: $i * 3px!important; }
+  .mb-#{$i} { margin-bottom: $i * 3px!important; }
+  .ml-#{$i} { margin-left: $i * 3px!important; }
+  .mr-#{$i} { margin-right: $i * 3px!important; }
+
+  .mx-#{$i} { 
+      margin-left: $i * 3px!important; 
+      margin-right: $i * 3px!important; 
+  }
+
+  .my-#{$i} { 
+      margin-top: $i * 3px!important; 
+      margin-bottom: $i * 3px!important; 
+  }
+
+  .p-#{$i} { padding: $i * 3px; }
+  .pt-#{$i} { padding-top: $i * 3px!important; }
+  .pb-#{$i} { padding-bottom: $i * 3px!important; }
+  .pl-#{$i} { padding-left: $i * 3px!important; }
+  .pr-#{$i} { padding-right: $i * 3px!important; }
+
+  .px-#{$i} { 
+      padding-left: $i * 3px!important; 
+      padding-right: $i * 3px!important; 
+  }
+
+  .py-#{$i} { 
+      padding-top: $i * 3px!important; 
+      padding-bottom: $i * 3px!important; 
+  }
+}
+
+// Margin Y entre elementos hijos
+.cmy-1 > * {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+// Display
+.display-inline-block { display: inline-block; }
+.display-block { display: block; }
+.display-flex { display: flex; }
+.display-none, .hidden { display: none; }
+
+// Text color
+.text-primary { color: $primary!important; }
+.text-secondary { color: $text-secondary-color!important; }
+.text-success { color: $success!important; }
+.text-warning { color: $warning!important; }
+.text-danger { color: $danger!important; }
+.text-white { color: #fff!important; }
+.text-info { color: $info!important; }
+.text-dark { color: $text-color; }
+.text-indigo { color: $indigo700; }
+.text-teal { color: $teal500; }
+.text-pink { color: $pink500; }
+
+.text-uppercase { text-transform: uppercase; }
+.text-bold { font-weight: bold; }

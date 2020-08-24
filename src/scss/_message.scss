@@ -1,0 +1,58 @@
+@include block(message) {
+  position: absolute;
+  top: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
+  width: 300px;
+  color: $grey800;
+  background-color: $white;
+
+  @if ($is-rounded) {
+    border-radius: $radius;
+  }
+
+  @if ($is-shadowed) {
+    box-shadow: $low-shadow;
+  }
+
+  @include mobile-l {
+    width: 450px;
+  }
+
+  @include element(title) {
+    font-weight: 500;
+    font-size: 1.1em;
+  }
+
+  @include modifier(primary) {
+    color: $white;
+    background-color: $primary;
+  }
+
+  @include modifier(secondary) {
+    color: $white;
+    background-color: $secondary;
+  }
+
+  @include modifier(danger) {
+    color: $white;
+    background-color: $danger;
+  }
+
+  @include modifier(warning) {
+    color: $white;
+    background-color: $warning;
+  }
+
+  @include modifier(success) {
+    color: $white;
+    background-color: $success;
+  }
+
+  @include modifier(info) {
+    color: $white;
+    background-color: $info;
+  }
+}

@@ -1,0 +1,65 @@
+@include block(textarea) {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  transition: all 90ms ease-in;
+  background-color: $white;
+  border: 1px solid $grey400;
+
+  @if $is-rounded {
+    border-radius: $radius;
+  }
+
+  &:hover {
+    border-color: $grey600;
+    transition-timing-function: ease-out;
+  }
+
+  @include when(focus) {
+    border-color: $primary;
+  }
+
+  @include when(disabled) {
+    color: $grey600;
+    background-color: $grey50;
+    border: 1px solid $grey400;
+  }
+
+  @include when(readonly) {
+    color: $grey600;
+    background-color: $grey100;
+    border: 1px solid $grey400;
+  }
+
+  @include element(inner) {
+    width: 100%;
+    padding: 7px 9px;
+    border: none;
+  
+    &:focus {
+      outline: none;
+    }
+
+    @include when(disabled) {
+      color: $grey600;
+      cursor: not-allowed;
+    }
+  
+    @include when(readonly) {
+      color: $grey600;
+      cursor: initial;
+    }
+
+    @include when(fixed) {
+      resize: none;
+    }
+
+    @include modifier(small) {
+      padding: 3px 9px;
+    }
+
+    @include modifier(large) {
+      padding: 11px 9px;
+    }
+  }
+}

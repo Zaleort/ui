@@ -1,0 +1,11 @@
+@include block(aside) {
+  flex-shrink: 0;
+  background-color: $white;
+  border-right: 1px solid $grey200;
+  padding: 1em 0;
+  overflow: auto;
+
+  @if ($is-shadowed) {
+    box-shadow: $low-shadow;
+  }
+}
