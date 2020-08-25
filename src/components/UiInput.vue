@@ -119,6 +119,22 @@ export default defineComponent({
       set: val => context.emit('update:value', val),
     });
 
+    const handleInput = (e: InputEvent) => {
+      context.emit('input', e);
+
+      if (typeof props.validator === 'function' && props.validateOn === 'input') {
+        props.validator();
+      }
+    };
+
+    const handleChange = (e: Event) => {
+      context.emit('change', e);
+
+      if (typeof props.validator === 'function' && props.validateOn === 'change') {
+        props.validator();
+      }
+    };
+
     const focus = ref(false);
     const setFocus = (set: boolean) => focus.value = set;
     const handleFocus = () => setFocus(true);
@@ -136,22 +152,6 @@ export default defineComponent({
     const hasAppend = computed(() => !!context.slots.append);
 
     const inputValidateOn = computed(() => props.validateOn || formValidateOn);
-
-    const handleInput = (e: InputEvent) => {
-      context.emit('input', e);
-
-      if (typeof props.validator === 'function' && props.validateOn === 'input') {
-        props.validator();
-      }
-    };
-
-    const handleChange = (e: Event) => {
-      context.emit('change', e);
-
-      if (typeof props.validator === 'function' && props.validateOn === 'change') {
-        props.validator();
-      }
-    };
 
     if (typeof formValidators === 'function' && typeof props.validator === 'function') {
       formValidators(props.validator);

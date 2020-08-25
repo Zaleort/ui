@@ -3,7 +3,7 @@
     <transition name="ui-dialog-fade">
       <div
         v-show="visibility"
-        ref="dialogContainer"
+        ref="draggableContainer"
         :class="{
           'ui-dialog__container': true,
           'is-mask': mask && !draggable && fullscreen !== true,
@@ -27,7 +27,7 @@
           :style="containerStyles"
           @click.stop
         >
-          <header class="ui-dialog__header" @mousedown="dragMouseDown">
+          <header class="ui-dialog__header" @mousedown="onDragMouseDown">
             <div>
               <slot name="header" />
             </div>
@@ -59,7 +59,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed, watch } from 'vue';
+import draggable from '@/composables/draggable';
 
 export default defineComponent({
   name: 'UiDialog',
@@ -102,97 +103,62 @@ export default defineComponent({
 
   emits: ['update:visibility'],
 
-  data() {
-    return {
-      positions: {
-        clientX: 0,
-        clientY: 0,
-        movementX: 0,
-        movementY: 0,
-      },
+  setup(props, context) {
+    const {
+      defaultPositions,
+      draggableContainer,
+      dragMouseDown,
+    } = draggable();
 
-      defaultPositions: {
-        top: null,
-        left: null,
+    const hasFooter = computed(() => !!context.slots.footer);
+    const styles = computed(() => {
+      if (props.width && (!props.mask || props.draggable)) {
+        return props.width;
+      }
+
+      return {};
+    });
+
+    const containerStyles = computed(() => ({
+      width: props.width,
+      minWidth: props.minWidth,
+      maxWidth: props.maxWidth,
+    }));
+
+    watch(
+      () => props.visibility,
+      () => {
+        if (props.visibility === false) {
+          // Espera a que finalice la animación para resetear posición del diálogo
+          if (!draggableContainer.value) return;
+
+          setTimeout(() => {
+            (draggableContainer.value! as HTMLElement).style.top = defaultPositions.top;
+            (draggableContainer.value! as HTMLElement).style.left = defaultPositions.left;
+          }, 190);
+        }
       },
+    );
+
+    const close = () => {
+      context.emit('update:visibility', false);
     };
-  },
 
-  computed: {
-    hasFooter(): boolean {
-      return !!this.$slots.footer;
-    },
+    const onDragMouseDown = (e: MouseEvent) => {
+      if (!props.draggable) return;
+      dragMouseDown(e);
+    };
 
-    styles(): object {
-      const styles: any = {};
-
-      if (this.width && (!this.mask || this.draggable)) {
-        styles.width = this.width;
-      }
-
-      return styles;
-    },
-
-    containerStyles(): object {
-      const styles: any = {};
-
-      if (this.width) styles.width = this.width;
-      if (this.minWidth) styles['min-width'] = this.minWidth;
-      if (this.maxWidth) styles['max-width'] = this.maxWidth;
-
-      return styles;
-    },
-  },
-
-  watch: {
-    visibility() {
-      if (this.visibility === false) {
-        // Espera a que finalice la animación para resetear posición del diálogo
-        setTimeout(() => {
-          (this.$refs.dialogContainer as any).style.top = this.defaultPositions.top;
-          (this.$refs.dialogContainer as any).style.left = this.defaultPositions.left;
-        }, 190);
-      }
-    },
-  },
-
-  mounted() {
-    this.defaultPositions.top = (this.$refs.dialogContainer as any).style.top;
-    this.defaultPositions.left = (this.$refs.dialogContainer as any).style.left;
-  },
-
-  methods: {
-    close() {
-      this.$emit('update:visibility', false);
-    },
-
-    dragMouseDown(event: MouseEvent) {
-      if (!this.draggable) return;
-
-      event.preventDefault();
-      this.positions.clientX = event.clientX;
-      this.positions.clientY = event.clientY;
-      document.onmousemove = this.drag;
-      document.onmouseup = this.stopDrag;
-    },
-
-    drag(event: MouseEvent) {
-      if (!this.draggable) return;
-
-      event.preventDefault();
-      this.positions.movementX = this.positions.clientX - event.clientX;
-      this.positions.movementY = this.positions.clientY - event.clientY;
-      this.positions.clientX = event.clientX;
-      this.positions.clientY = event.clientY;
-
-      (this.$refs.dialogContainer as any).style.top = `${(this.$refs.dialogContainer as any).offsetTop - this.positions.movementY}px`;
-      (this.$refs.dialogContainer as any).style.left = `${(this.$refs.dialogContainer as any).offsetLeft - this.positions.movementX}px`;
-    },
-
-    stopDrag() {
-      document.onmouseup = null;
-      document.onmousemove = null;
-    },
+    return {
+      defaultPositions,
+      draggableContainer,
+      dragMouseDown,
+      onDragMouseDown,
+      hasFooter,
+      styles,
+      containerStyles,
+      close,
+    };
   },
 });
 </script>
