@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 /* @ts-ignore */
 import icons from '@/components/icons/icons';
 import { UiIcons } from '@/interfaces/Icons';
@@ -60,10 +60,9 @@ export default defineComponent({
     },
   },
 
-  computed: {
-    iconComponent(): Function {
-      return (icons as UiIcons)[this.icon];
-    },
+  setup(props) {
+    const iconComponent = computed(() => (icons as UiIcons)[props.icon]);
+    return { iconComponent };
   },
 });
 </script>
