@@ -56,7 +56,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+import formInject from '@/composables/formInject';
 
 export default defineComponent({
   name: 'UiInput',
@@ -105,96 +106,75 @@ export default defineComponent({
 
   emits: ['update:value', 'input', 'change'],
 
-  setup() {
-    const formDisabled = inject('formDisabled', false);
-    const formSize = inject('formSize', null);
-    const formValidators = inject('formValidators');
-    const formValidateOn = inject('formValidateOn', 'submit');
+  setup(props, context) {
+    const {
+      formDisabled,
+      formSize,
+      formValidateOn,
+      formValidators,
+    } = formInject();
+
+    const inputValue = computed({
+      get: () => props.value,
+      set: val => context.emit('update:value', val),
+    });
+
+    const focus = ref(false);
+    const setFocus = (set: boolean) => focus.value = set;
+    const handleFocus = () => setFocus(true);
+    const handleBlur = () => {
+      setFocus(false);
+
+      if (typeof props.validator === 'function' && props.validateOn === 'blur') {
+        props.validator();
+      }
+    };
+
+    const isDisabled = computed(() => props.disabled || formDisabled);
+    const inputSize = computed(() => props.size || formSize || 'normal');
+    const hasPrepend = computed(() => !!context.slots.prepend);
+    const hasAppend = computed(() => !!context.slots.append);
+
+    const inputValidateOn = computed(() => props.validateOn || formValidateOn);
+
+    const handleInput = (e: InputEvent) => {
+      context.emit('input', e);
+
+      if (typeof props.validator === 'function' && props.validateOn === 'input') {
+        props.validator();
+      }
+    };
+
+    const handleChange = (e: Event) => {
+      context.emit('change', e);
+
+      if (typeof props.validator === 'function' && props.validateOn === 'change') {
+        props.validator();
+      }
+    };
+
+    if (typeof formValidators === 'function' && typeof props.validator === 'function') {
+      formValidators(props.validator);
+    }
 
     return {
+      inputValue,
+      focus,
+      setFocus,
+      handleFocus,
+      handleBlur,
       formDisabled,
       formSize,
       formValidators,
       formValidateOn,
+      isDisabled,
+      inputSize,
+      hasPrepend,
+      hasAppend,
+      inputValidateOn,
+      handleInput,
+      handleChange,
     };
-  },
-
-  data() {
-    return {
-      focus: false,
-    };
-  },
-
-  computed: {
-    inputValue: {
-      get(): string {
-        return this.value;
-      },
-
-      set(val: string) {
-        this.$emit('update:value', val);
-      },
-    },
-
-    hasPrepend(): boolean {
-      return !!this.$slots.prepend;
-    },
-
-    hasAppend(): boolean {
-      return !!this.$slots.append;
-    },
-
-    isDisabled(): boolean {
-      return this.disabled || this.formDisabled;
-    },
-
-    inputSize(): string {
-      return this.size || this.formSize || 'normal';
-    },
-
-    inputValidateOn(): string {
-      return this.validateOn || this.formValidateOn;
-    },
-  },
-
-  created() {
-    if (typeof this.formValidators === 'function' && typeof this.validator === 'function') {
-      this.formValidators(this.validator);
-    }
-  },
-
-  methods: {
-    setFocus(set: boolean) {
-      this.focus = set;
-    },
-
-    handleInput(e: InputEvent) {
-      this.$emit('input', e);
-
-      if (typeof this.validator === 'function' && this.validateOn === 'input') {
-        this.validator();
-      }
-    },
-
-    handleChange(e: Event) {
-      this.$emit('change', e);
-
-      if (typeof this.validator === 'function' && this.validateOn === 'change') {
-        this.validator();
-      }
-    },
-
-    handleFocus() {
-      this.setFocus(true);
-    },
-
-    handleBlur() {
-      this.setFocus(false);
-
-      if (typeof this.validator === 'function' && this.validateOn === 'blur') {
-        this.validator();
-      }
-    },
   },
 });
 </script>
