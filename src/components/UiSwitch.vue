@@ -25,7 +25,6 @@
         :name="name"
         @focus="focus = true"
         @blur="focus = false"
-        @change="handleChange"
       >
     </span>
     <span v-if="hasLabel" class="ui-switch__label">
@@ -35,7 +34,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed, ref } from 'vue';
+import formInject from '@/composables/formInject';
 
 export default defineComponent({
   name: 'UiSwitch',
@@ -73,36 +73,24 @@ export default defineComponent({
 
   emits: ['update:checked'],
 
-  data() {
+  setup(props, context) {
+    const focus = ref(false);
+    const checkValue = computed({
+      get: () => props.checked,
+      set: (check: boolean) => context.emit('update:checked', check),
+    });
+
+    const { formDisabled } = formInject();
+    const isDisabled = computed(() => props.disabled || formDisabled);
+
+    const hasLabel = computed(() => !!props.label || !!context.slots.default);
+
     return {
-      focus: false,
+      focus,
+      checkValue,
+      hasLabel,
+      isDisabled,
     };
-  },
-
-  computed: {
-    checkValue: {
-      get(): boolean {
-        return this.checked;
-      },
-
-      set(check: boolean) {
-        this.$emit('update:checked', check);
-      },
-    },
-
-    hasLabel(): boolean {
-      if (this.label || this.$slots.default) {
-        return true;
-      }
-
-      return false;
-    },
-  },
-
-  methods: {
-    handleChange() {
-      console.log(this.checked);
-    },
   },
 });
 </script>
