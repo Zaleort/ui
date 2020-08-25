@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
+import { defineComponent, inject, computed } from 'vue';
 
 export default defineComponent({
   name: 'UiLabel',
@@ -34,24 +34,16 @@ export default defineComponent({
     },
   },
 
-  setup() {
+  setup(props) {
     const formLabelProps = inject('labelProps', { position: null, width: null, asterisk: false });
+    const labelWidth = computed(() => props.width || formLabelProps.width || 'auto');
+    const labelPosition = computed(() => props.position || formLabelProps.position);
 
     return {
       formLabelProps,
+      labelWidth,
+      labelPosition,
     };
-  },
-
-  computed: {
-    labelWidth(): string {
-      return this.width || this.formLabelProps.width || 'auto';
-    },
-
-    labelPosition(): string | null {
-      console.log(this.position);
-      console.log(this.formLabelProps.position);
-      return this.position || this.formLabelProps.position;
-    },
   },
 });
 </script>
