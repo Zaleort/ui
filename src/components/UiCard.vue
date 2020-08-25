@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 
 export default defineComponent({
   name: 'UiCard',
@@ -62,22 +62,18 @@ export default defineComponent({
     },
   },
 
-  computed: {
-    hasHeader(): boolean {
-      return !!this.$slots.header;
-    },
+  setup(props, context) {
+    const hasHeader = computed(() => !!context.slots.header);
+    const hasTitle = computed(() => !!context.slots.title);
+    const hasOptions = computed(() => !!context.slots.options);
+    const hasFooter = computed(() => !!context.slots.footer);
 
-    hasTitle(): boolean {
-      return !!this.$slots.title;
-    },
-
-    hasOptions(): boolean {
-      return !!this.$slots.options;
-    },
-
-    hasFooter(): boolean {
-      return !!this.$slots.footer;
-    },
+    return {
+      hasHeader,
+      hasTitle,
+      hasOptions,
+      hasFooter,
+    };
   },
 });
 </script>
