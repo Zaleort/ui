@@ -25,7 +25,6 @@
         :name="name"
         @focus="focus = true"
         @blur="focus = false"
-        @change="handleChange"
       >
     </span>
     <span v-if="hasLabel" class="ui-checkbox__label">
@@ -35,7 +34,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+import formInject from '@/composables/formInject';
 
 export default defineComponent({
   name: 'UiCheckbox',
@@ -73,54 +73,32 @@ export default defineComponent({
 
   emits: ['update:checked'],
 
-  setup() {
-    const formDisabled = inject('formDisabled', false);
-    const formSize = inject('formSize', null);
-    const formValidators = inject('formValidators');
-    const formValidateOn = inject('formValidateOn', 'submit');
+  setup(props, context) {
+    const focus = ref(false);
 
-    return {
-      formDisabled,
-      formSize,
-      formValidators,
-      formValidateOn,
-    };
-  },
+    const { formDisabled } = formInject();
+    const isDisabled = computed(() => props.disabled || formDisabled);
 
-  data() {
-    return {
-      focus: false,
-    };
-  },
-
-  computed: {
-    checkValue: {
-      get(): boolean {
-        return this.checked;
-      },
-
-      set(check: boolean) {
-        this.$emit('update:checked', check);
-      },
-    },
-
-    hasLabel(): boolean {
-      if (this.label || this.$slots.default) {
+    const hasLabel = computed(() => {
+      if (props.label || context.slots.default) {
         return true;
       }
 
       return false;
-    },
+    });
 
-    isDisabled(): boolean {
-      return this.disabled || this.formDisabled;
-    },
-  },
+    const checkValue = computed({
+      get: () => props.checked,
+      set: (check: boolean) => context.emit('update:checked', check),
+    });
 
-  methods: {
-    handleChange() {
-      console.log(this.checked);
-    },
+    return {
+      focus,
+      hasLabel,
+      isDisabled,
+      formDisabled,
+      checkValue,
+    };
   },
 });
 </script>
