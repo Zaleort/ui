@@ -1,5 +1,7 @@
 <script>
-import { defineComponent, h, withModifiers } from 'vue';
+import {
+  defineComponent, h, withModifiers, ref, onMounted, onUnmounted, render,
+} from 'vue';
 
 export default defineComponent({
   name: 'UiMenu',
@@ -28,54 +30,51 @@ export default defineComponent({
 
   emits: ['update:collapsed', 'update:visible'],
 
-  data() {
-    return {
-      isMobile: window.innerWidth < 1024,
-    };
-  },
-
-  mounted() {
-    if (window.innerWidth > 1024) {
-      this.$emit('update:visible', true);
-    }
-
-    window.addEventListener('resize', this.handleVisible);
-  },
-
-  unmounted() {
-    window.removeEventListener('resize', this.handleVisible);
-  },
-
-  methods: {
-    close() {
-      this.$emit('update:visible', false);
-    },
-
-    closeOnAction() {
-      if (this.isMobile && this.hamburger) {
-        this.$emit('update:visible', false);
+  setup(props, context) {
+    const isMobile = ref(window.innerWidth < 1024);
+    const close = () => context.emit('update:visible', false);
+    const closeOnAction = () => {
+      if (isMobile.value && props.hamburger) {
+        context.emit('update:visible', false);
       }
-    },
+    };
 
-    collapse() {
-      this.$emit('update:collapsed', !this.collapsed);
-    },
+    const collapse = () => {
+      context.emit('update:collapsed', !props.collapsed);
+    };
 
-    handleVisible() {
-      console.log(window.innerWidth);
-      console.log(this.isMobile);
-
-      if (window.innerWidth < 1024 && !this.isMobile) {
-        this.$emit('update:visible', false);
-        this.isMobile = true;
+    const handleVisible = () => {
+      if (window.innerWidth < 1024 && !isMobile.value) {
+        context.emit('update:visible', false);
+        isMobile.value = true;
         return;
       }
 
-      if (window.innerWidth > 1024 && this.isMobile) {
-        this.isMobile = false;
-        this.$emit('update:visible', true);
+      if (window.innerWidth > 1024 && isMobile.value) {
+        isMobile.value = false;
+        context.emit('update:visible', true);
       }
-    },
+    };
+
+    onMounted(() => {
+      if (window.innerWidth > 1024) {
+        context.emit('update:visible', true);
+      }
+
+      window.addEventListener('resize', handleVisible);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', handleVisible);
+    });
+
+    return {
+      isMobile,
+      close,
+      closeOnAction,
+      collapse,
+      handleVisible,
+    };
   },
 
   render() {
