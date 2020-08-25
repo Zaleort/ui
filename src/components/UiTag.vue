@@ -39,19 +39,6 @@ export default defineComponent({
     color: {
       type: String,
       default: 'primary',
-      validator: (value: string) => {
-        const colores = [
-          'primary',
-          'secondary',
-          'success',
-          'warning',
-          'danger',
-          'info',
-          'grey',
-        ];
-
-        return colores.indexOf(value) !== -1;
-      },
     },
 
     pill: {
@@ -67,10 +54,9 @@ export default defineComponent({
 
   emits: ['close'],
 
-  methods: {
-    close() {
-      this.$emit('close', true);
-    },
+  setup(props, context) {
+    const close = () => context.emit('close', true);
+    return { close };
   },
 });
 </script>
