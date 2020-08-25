@@ -22,7 +22,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
+import { defineComponent, computed } from 'vue';
+import formInject from '@/composables/formInject';
 
 export default defineComponent({
   name: 'UiButton',
@@ -46,19 +47,6 @@ export default defineComponent({
     color: {
       type: String,
       default: 'primary',
-      validator: (value: string) => {
-        const colores = [
-          'primary',
-          'secondary',
-          'success',
-          'warning',
-          'danger',
-          'info',
-          'grey',
-        ];
-
-        return colores.indexOf(value) !== -1;
-      },
     },
 
     disabled: {
@@ -77,24 +65,17 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    const formDisabled = inject('formDisabled', false);
-    const formSize = inject('formSize', null);
+  setup(props) {
+    const { formDisabled, formSize } = formInject();
+    const isDisabled = computed(() => props.loading || props.disabled || formDisabled);
+    const buttonSize = computed(() => props.size || formSize || 'normal');
 
     return {
       formDisabled,
+      isDisabled,
       formSize,
+      buttonSize,
     };
-  },
-
-  computed: {
-    isDisabled(): boolean {
-      return this.loading || this.disabled || this.formDisabled;
-    },
-
-    buttonSize(): string {
-      return this.size || this.formSize || 'normal';
-    },
   },
 });
 </script>
