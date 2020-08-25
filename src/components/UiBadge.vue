@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 
 export default defineComponent({
   name: 'UiBadge',
@@ -38,19 +38,6 @@ export default defineComponent({
     color: {
       type: String,
       default: 'danger',
-      validator: (value: string) => {
-        const colores = [
-          'primary',
-          'secondary',
-          'success',
-          'warning',
-          'danger',
-          'info',
-          'grey',
-        ];
-
-        return colores.indexOf(value) !== -1;
-      },
     },
 
     display: {
@@ -59,20 +46,24 @@ export default defineComponent({
     },
   },
 
-  computed: {
-    displayValue(): string | number {
-      if (this.isDot || !this.value) {
+  setup(props) {
+    const displayValue = computed(() => {
+      if (props.isDot || !props.value) {
         return '';
       }
 
-      if (this.max) {
-        const val = Number.parseInt(this.value.toString(), 10);
-        if (Number.isNaN(val)) return this.value;
-        return val > this.max ? `${this.max}+` : val;
+      if (props.max) {
+        const val = Number.parseInt(props.value.toString(), 10);
+        if (Number.isNaN(val)) return props.value;
+        return val > props.max ? `${props.max}+` : val;
       }
 
-      return this.value;
-    },
+      return props.value;
+    });
+
+    return {
+      displayValue,
+    };
   },
 });
 </script>
