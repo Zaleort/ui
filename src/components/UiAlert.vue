@@ -1,5 +1,11 @@
 <template>
-  <div v-if="!isClosed" :class="classes">
+  <div
+    v-if="!isClosed"
+    :class="{
+      'ui-alert': true,
+      [`ui-alert--${color}`]: true,
+    }"
+  >
     <div>
       <div v-if="hasTitle" class="ui-alert__title">
         <slot name="title">
@@ -19,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 
 export default defineComponent({
   name: 'UiAlert',
@@ -43,19 +49,6 @@ export default defineComponent({
     color: {
       type: String,
       default: 'danger',
-      validator: (value: string) => {
-        const colores = [
-          'primary',
-          'secondary',
-          'success',
-          'warning',
-          'danger',
-          'info',
-          'grey',
-        ];
-
-        return colores.indexOf(value) !== -1;
-      },
     },
   },
 
@@ -63,34 +56,20 @@ export default defineComponent({
     closed: null,
   },
 
-  data() {
-    return {
-      isClosed: false,
+  setup(props, context) {
+    const isClosed = ref(false);
+    const close = () => {
+      isClosed.value = true;
+      context.emit('closed', true);
     };
-  },
 
-  computed: {
-    classes(): object {
-      return {
-        'ui-alert': true,
-        [`ui-alert--${this.color}`]: true,
-      };
-    },
+    const hasTitle = computed(() => !!props.title || !!context.slots.title);
 
-    hasTitle(): boolean {
-      if (this.title || this.$slots.title) {
-        return true;
-      }
-
-      return false;
-    },
-  },
-
-  methods: {
-    close() {
-      this.isClosed = true;
-      this.$emit('closed', true);
-    },
+    return {
+      isClosed,
+      close,
+      hasTitle,
+    };
   },
 });
 </script>
