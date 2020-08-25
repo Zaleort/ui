@@ -13,28 +13,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'UiDropdown',
-  props: {
+  setup() {
+    const isVisible = ref(false);
+    const hide = () => isVisible.value = false;
+    const toggle = () => isVisible.value = !isVisible.value;
 
-  },
-
-  data() {
     return {
-      isVisible: false,
+      isVisible,
+      hide,
+      toggle,
     };
-  },
-
-  methods: {
-    hide() {
-      this.isVisible = false;
-    },
-
-    toggle() {
-      this.isVisible = !this.isVisible;
-    },
   },
 });
 </script>

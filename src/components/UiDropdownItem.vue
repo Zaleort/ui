@@ -27,14 +27,13 @@ export default defineComponent({
     },
   },
 
-  methods: {
-    handleAction() {
-      if (this.disabled || !this.action) {
-        return;
-      }
+  setup(props) {
+    const handleAction = () => {
+      if (props.disabled || !props.action) return;
+      props.action();
+    };
 
-      this.action();
-    },
+    return { handleAction };
   },
 });
 </script>
