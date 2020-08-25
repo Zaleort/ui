@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'UiForm',
@@ -74,27 +74,25 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      validators: new Set<Function>(),
-    };
-  },
-
-  methods: {
-    registerValidator(validator: Function) {
-      this.validators.add(validator);
-    },
-
-    validate() {
+  setup() {
+    const validators = ref(new Set<Function>());
+    const registerValidator = (validator: Function) => validators.value.add(validator);
+    const validate = () => {
       let valid = true;
-      this.validators.forEach(fn => {
+      validators.value.forEach(fn => {
         if (!fn()) {
           valid = false;
         }
       });
 
       return valid;
-    },
+    };
+
+    return {
+      validators,
+      registerValidator,
+      validate,
+    };
   },
 });
 </script>
