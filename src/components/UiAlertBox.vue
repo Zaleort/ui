@@ -15,7 +15,8 @@
         >
           <div class="ui-alert-box__body">
             <ui-icon
-              class="mr-1"
+              class="mr-3"
+              size="x2"
               :icon="type"
             />
             <div>

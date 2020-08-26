@@ -7,8 +7,8 @@
     <th v-for="(h, index) of headings" :key="index">
       {{ h.name }}
       <div class="ui-table__order">
-        <ui-icon icon="chevronUp" />
-        <ui-icon icon="chevronDown" />
+        <ui-icon icon="chevronUp" size="small" />
+        <ui-icon icon="chevronDown" size="small" />
       </div>
     </th>
 

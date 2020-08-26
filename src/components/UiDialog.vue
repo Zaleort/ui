@@ -36,7 +36,7 @@
               <slot name="actions">
                 <ui-icon
                   icon="close"
-                  :width="21"
+                  size="large"
                   @click="close"
                 />
               </slot>

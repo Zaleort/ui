@@ -15,7 +15,7 @@
       v-if="loading"
       class="ui-icon-loading"
       icon="loading"
-      width="14"
+      size="small"
     />
     <slot />
   </button>

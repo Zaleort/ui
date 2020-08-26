@@ -13,7 +13,7 @@
       v-if="closable"
       class="ui-tag__close"
       icon="close"
-      :width="14"
+      size="small"
       @click="close"
     />
   </span>

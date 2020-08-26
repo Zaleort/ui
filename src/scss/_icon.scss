@@ -1,5 +1,31 @@
 @include block(icon) {
   transition: all 120ms ease;
+
+  @include modifier(mini) {
+    width: 0.8em;
+  }
+
+  @include modifier(small) {
+    width: 0.9em;
+  }
+
+  @include modifier(normal) {
+    width: 1em;
+  }
+
+  @include modifier(large) {
+    width: 1.2em;
+  }
+
+  @include modifier(xlarge) {
+    width: 1.5em;
+  }
+
+  @for $i from 2 to 5 {
+    @include modifier('x' + $i) {
+      width: $i * 1em;
+    }
+  }
 }
 
 .ui-icon-loading {

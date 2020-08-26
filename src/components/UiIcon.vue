@@ -1,9 +1,10 @@
 <template>
   <svg
-    class="ui-icon"
+    :class="{
+      'ui-icon': true,
+      [`ui-icon--${size}`]: true,
+    }"
     xmlns="http://www.w3.org/2000/svg"
-    :width="width"
-    :height="height"
     :viewBox="viewBox"
     :aria-labelledby="icon"
     role="presentation"
@@ -39,19 +40,14 @@ export default defineComponent({
       default: 'icon',
     },
 
-    width: {
-      type: [Number, String],
-      default: 16,
-    },
-
-    height: {
-      type: [Number, String],
-      default: '100%',
-    },
-
     color: {
       type: String,
       default: 'currentColor',
+    },
+
+    size: {
+      type: String,
+      default: 'normal',
     },
 
     description: {
