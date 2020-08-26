@@ -52,7 +52,7 @@ export default defineComponent({
 
   // Sin setup por ahora Vue no detecta el tipo de Gutter (rc-5)
   setup() {
-    const gutter = inject('gutter', 10);
+    const gutter = inject('gutter', 'normal');
 
     return {
       gutter,
@@ -63,6 +63,7 @@ export default defineComponent({
     const classList = {
       'ui-col': true,
       'ui-col--grow': this.grow,
+      [`ui-col--gutter-${this.gutter}`]: this.gutter,
       [`ui-col-${this.span}`]: this.span >= 0,
       [`ui-col-m-${this.m}`]: this.m >= 0,
       [`ui-col-ml-${this.ml}`]: this.ml >= 0,
@@ -72,13 +73,8 @@ export default defineComponent({
       [`ui-col-dxl-${this.dxl}`]: this.dxl >= 0,
     };
 
-    const style = {
-      padding: `0 ${this.gutter / 2}px`,
-    };
-
     return h(this.tag, {
       class: classList,
-      style,
     }, this.$slots.default ? this.$slots.default() : []);
   },
 });

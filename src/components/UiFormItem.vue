@@ -3,6 +3,7 @@
     :class="{
       'ui-form-item': true,
       'ui-col--grow': grow,
+      [`ui-col--gutter-${gutter}`]: gutter,
       [`ui-col-${span}`]: span >= 0,
       [`ui-col-m-${m}`]: m >= 0,
       [`ui-col-ml-${ml}`]: ml >= 0,
@@ -92,7 +93,7 @@ export default defineComponent({
 
   // Sin setup por ahora Vue no detecta el tipo de Gutter (rc-5)
   setup() {
-    const gutter = inject('gutter', 10);
+    const gutter = inject('gutter', 'normal');
 
     return {
       gutter,

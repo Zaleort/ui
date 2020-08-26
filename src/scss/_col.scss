@@ -5,6 +5,22 @@
   @include modifier(grow) {
     flex-grow: 1;
   }
+
+  @include mobile {
+    width: 100%;
+  }
+
+  @include modifier(gutter-small) {
+    padding: 0 3px;
+  }
+
+  @include modifier(gutter-normal) {
+    padding: 0 6px;
+  }
+
+  @include modifier(gutter-large) {
+    padding: 0 9px;
+  }
 }
 
 @for $i from 0 through 24 {
