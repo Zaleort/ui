@@ -1,4 +1,5 @@
 import UiAlert from '@/components/UiAlert.vue';
+import UiAlertBox from '@/components/UiAlertBox.vue';
 import UiAside from '@/components/UiAside.vue';
 import UiBadge from '@/components/UiBadge.vue';
 import UiButton from '@/components/UiButton.vue';
@@ -31,6 +32,7 @@ import { App } from 'vue';
 
 const components = [
   UiAlert,
+  UiAlertBox,
   UiAside,
   UiBadge,
   UiButton,

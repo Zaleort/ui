@@ -1,0 +1,68 @@
+@include block(alert-box) {
+  background-color: $white;
+  padding: 12px;
+  border: 1px solid $border-color;
+  width: 300px;
+
+  @if ($is-rounded) {
+    border-radius: $radius;
+  }
+
+  @if($is-shadowed) {
+    box-shadow: $low-shadow;
+  }
+
+  @include modifier(error) {
+    & g {
+      fill: $danger;
+    }
+  }
+
+  @include modifier(warning) {
+    & g {
+      fill: $warning;
+    }
+  }
+
+  @include modifier(success) {
+    & g {
+      fill: $success;
+    }
+  }
+
+  @include modifier(info) {
+    & g {
+      fill: $info;
+    }
+  }
+
+  @include element(mask) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 2000;
+  }
+
+  @include element(title) {
+    display: block;
+    font-weight: 500;
+    font-size: 1.1em;
+  }
+
+  @include element(body) {
+    display: flex;
+    align-items: center;
+  }
+
+  @include element(footer) {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 1em;
+  }
+}
