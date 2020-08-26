@@ -17,8 +17,8 @@ interface UiAlertBoxOptions {
 }
 
 export default () => {
-  const alertComponent = ref<VNode | null>(null);
-  const alertOptions = reactive({
+  const showAlertBox = ref(false);
+  const alertDefaultOptions = reactive({
     type: 'error',
     okButton: 'Ok',
     okButtonColor: 'primary',
@@ -31,14 +31,23 @@ export default () => {
     title: '',
   });
 
-  const showAlert = (options: UiAlertBoxOptions) => {
-    const _options = { ...alertOptions, ...options };
+  const alertComponent = ref<VNode>(h(UiAlertBox, { ...alertDefaultOptions }));
+
+  const openAlert = (options: UiAlertBoxOptions) => {
+    const _options = { ...alertDefaultOptions, ...options };
+    showAlertBox.value = true;
     alertComponent.value = h(UiAlertBox, { ..._options });
   };
 
+  const closeAlert = () => {
+    showAlertBox.value = false;
+  };
+
   return {
+    showAlertBox,
     alertComponent,
-    alertOptions,
-    showAlert,
+    alertDefaultOptions,
+    openAlert,
+    closeAlert,
   };
 };

@@ -1,41 +1,48 @@
 <template>
   <teleport to="body">
-    <div class="ui-alert-box__mask">
+    <transition name="ui-alert-box-fade">
       <div
-        :class="{
-          'ui-alert-box': true,
-          [`ui-alert-box--${type}`]: true,
-        }"
+        v-if="show"
+        class="ui-alert-box__mask"
+        @click="alertCancel"
       >
-        <div class="ui-alert-box__body">
-          <ui-icon
-            class="mr-1"
-            :icon="type"
-          />
-          <div>
-            <span class="ui-alert-box__title">{{ title }}</span>
-            {{ message }}
+        <div
+          :class="{
+            'ui-alert-box': true,
+            [`ui-alert-box--${type}`]: true,
+          }"
+          @click.stop
+        >
+          <div class="ui-alert-box__body">
+            <ui-icon
+              class="mr-1"
+              :icon="type"
+            />
+            <div>
+              <span class="ui-alert-box__title">{{ title }}</span>
+              {{ message }}
+            </div>
           </div>
+          <footer class="ui-alert-box__footer">
+            <ui-button
+              :color="okButtonColor"
+              size="small"
+              @click="alertOk(okButtonAction)"
+            >
+              {{ okButton }}
+            </ui-button>
+            <ui-button
+              v-if="showCancelButton"
+              :color="cancelButtonColor"
+              size="small"
+              @click="alertCancel(cancelButtonAction)"
+            >
+              {{ cancelButton }}
+            </ui-button>
+          </footer>
         </div>
-        <footer class="ui-alert-box__footer">
-          <ui-button
-            :color="okButtonColor"
-            size="small"
-            @click="alertOk(okButtonAction)"
-          >
-            {{ okButton }}
-          </ui-button>
-          <ui-button
-            v-if="showCancelButton"
-            :color="cancelButtonColor"
-            size="small"
-            @click="alertCancel(cancelButtonAction)"
-          >
-            {{ cancelButton }}
-          </ui-button>
-        </footer>
       </div>
-    </div>
+    </transition>
   </teleport>
 </template>
 
@@ -93,6 +100,11 @@ export default defineComponent({
     title: {
       type: String,
       default: '',
+    },
+
+    show: {
+      type: Boolean,
+      default: false,
     },
   },
 
