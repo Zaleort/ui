@@ -37,6 +37,7 @@
                 <ui-icon
                   icon="close"
                   size="large"
+                  class="clickable"
                   @click="close"
                 />
               </slot>
