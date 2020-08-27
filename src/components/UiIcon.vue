@@ -1,4 +1,4 @@
-<template>
+<template v-if="iconComponent">
   <svg
     :class="{
       'ui-icon': true,
@@ -23,7 +23,6 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-/* @ts-ignore */
 import icons from '@/components/icons/icons';
 import { UiIcons } from '@/interfaces/Icons';
 
