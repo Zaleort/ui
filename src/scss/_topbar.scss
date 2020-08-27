@@ -5,9 +5,12 @@
   align-items: center;
   z-index: 1000;
   padding: 0 1em;
-  box-shadow: $low-shadow;
   width: 100%;
   height: $topbar-height;
+
+  @if ($is-shadowed) {
+    box-shadow: $low-shadow;
+  }
 
   @include modifier(primary) {
     background-color: $primary;
