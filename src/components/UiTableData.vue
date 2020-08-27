@@ -1,6 +1,9 @@
 <template>
   <td
-    class="ui-table__data"
+    :class="{
+      'ui-table__data': true,
+      [`ui-table__data--${tableSize}`]: true,
+    }"
     :style="{
       textAlign: align,
     }"
@@ -10,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
 
 export default defineComponent({
   name: 'UiTableData',
@@ -19,6 +22,14 @@ export default defineComponent({
       type: String,
       default: null,
     },
+  },
+
+  setup(props, context) {
+    const tableSize = inject('tableSize', 'normal');
+
+    return {
+      tableSize,
+    };
   },
 });
 </script>
