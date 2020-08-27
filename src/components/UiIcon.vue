@@ -3,6 +3,7 @@
     :class="{
       'ui-icon': true,
       [`ui-icon--${size}`]: true,
+      [`ui-icon--${color}`]: color !== null,
     }"
     xmlns="http://www.w3.org/2000/svg"
     :viewBox="viewBox"
@@ -15,7 +16,7 @@
     >
       {{ description }}
     </title>
-    <g :fill="color">
+    <g :fill="fill">
       <component :is="iconComponent" />
     </g>
   </svg>
@@ -40,6 +41,11 @@ export default defineComponent({
     },
 
     color: {
+      type: String,
+      default: null,
+    },
+
+    fill: {
       type: String,
       default: 'currentColor',
     },

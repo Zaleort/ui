@@ -21,6 +21,38 @@
     width: 1.5em;
   }
 
+  @include modifier(black) {
+    & g { fill: $text-color; }
+  }
+
+  @include modifier(primary) {
+    & g { fill: $primary; }
+  }
+
+  @include modifier(secondary) {
+    & g { fill: $secondary; }
+  }
+
+  @include modifier(danger) {
+    & g { fill: $danger; }
+  }
+
+  @include modifier(warning) {
+    & g { fill: $warning; }
+  }
+
+  @include modifier(success) {
+    & g { fill: $success; }
+  }
+
+  @include modifier(info) {
+    & g { fill: $info; }
+  }
+
+  @include modifier(grey) {
+    & g { fill: $text-secondary-color; }
+  }
+
   @for $i from 2 to 5 {
     @include modifier('x' + $i) {
       width: $i * 1em;
