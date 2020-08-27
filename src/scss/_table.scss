@@ -1,0 +1,45 @@
+@include block(table) {
+  width: 100%;
+  background-color: $white;
+  border: 1px solid $border-color;
+  border-collapse: collapse;
+
+  @if ($is-rounded) {
+    border-radius: $radius;
+  }
+
+  @if ($is-shadowed) {
+    box-shadow: $low-shadow;
+  }
+
+  @include element(heading) {
+    text-align: left;
+    padding: 12px;
+    border: 1px solid $border-color;
+    color: $primary;
+    font-size: 1.1em;
+
+    @include modifier(small) {
+      padding: 7px;
+      font-size: 1em;
+    }
+  }
+
+  @include element(row) {
+    transition: all 50ms ease;
+
+    &:hover {
+      background-color: $grey50;
+    }
+  }
+
+  @include element(data) {
+    padding: 7px 12px;
+    border: 1px solid $border-color;
+
+    @include modifier(small) {
+      padding: 3px 7px;
+      font-size: 0.9em;
+    }
+  }
+}

@@ -23,6 +23,9 @@ import UiOption from '@/components/UiOption.vue';
 import UiRow from '@/components/UiRow.vue';
 import UiSelect from '@/components/UiSelect.vue';
 import UiSwitch from '@/components/UiSwitch.vue';
+import UiTable from '@/components/UiTable.vue';
+import UiTableData from '@/components/UiTableData.vue';
+import UiTableRow from '@/components/UiTableRow.vue';
 import UiTabs from '@/components/UiTabs.vue';
 import UiTabsPanel from '@/components/UiTabsPanel.vue';
 import UiTag from '@/components/UiTag.vue';
@@ -55,6 +58,9 @@ const components = [
   UiRow,
   UiSelect,
   UiSwitch,
+  UiTable,
+  UiTableData,
+  UiTableRow,
   UiTabs,
   UiTabsPanel,
   UiTag,
