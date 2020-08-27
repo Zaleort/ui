@@ -2,19 +2,7 @@ import {
   ref, VNode, reactive, h,
 } from 'vue';
 import UiAlertBox from '@/components/UiAlertBox.vue';
-
-interface UiAlertBoxOptions {
-  type: string;
-  okButton: string;
-  okButtonColor: string;
-  okButtonAction: Function | null;
-  cancelButton: string;
-  cancelButtonColor: string;
-  cancelButtonAction: Function | null;
-  showCancelButton: boolean;
-  message: string;
-  title: string;
-}
+import { UiAlertBoxOptions } from '@/interfaces/AlertBox';
 
 export default () => {
   const showAlertBox = ref(false);
@@ -22,10 +10,10 @@ export default () => {
     type: 'error',
     okButton: 'OK',
     okButtonColor: 'primary',
-    okButtonAction: null,
+    okButtonAction: undefined,
     cancelButton: 'Cancelar',
     cancelButtonColor: 'danger',
-    cancelButtonAction: null,
+    cancelButtonAction: undefined,
     showCancelButton: false,
     message: '',
     title: '',
