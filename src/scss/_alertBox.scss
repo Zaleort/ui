@@ -2,7 +2,7 @@
   background-color: $white;
   padding: 12px;
   border: 1px solid $border-color;
-  width: 300px;
+  min-width: 310px;
 
   @if ($is-rounded) {
     border-radius: $radius;
@@ -10,6 +10,10 @@
 
   @if($is-shadowed) {
     box-shadow: $low-shadow;
+  }
+
+  & g {
+    fill: $primary;
   }
 
   @include modifier(error) {
@@ -50,9 +54,9 @@
   }
 
   @include element(title) {
-    display: block;
     font-weight: 500;
     font-size: 1.1em;
+    margin-bottom: 12px;
   }
 
   @include element(body) {

@@ -13,16 +13,16 @@
           }"
           @click.stop
         >
+          <header class="ui-alert-box__title">
+            {{ title }}
+          </header>
           <div class="ui-alert-box__body">
             <ui-icon
-              class="mr-3"
-              size="x2"
+              class="mr-4"
+              size="xlarge"
               :icon="type"
             />
-            <div>
-              <span class="ui-alert-box__title">{{ title }}</span>
-              {{ message }}
-            </div>
+            {{ message }}
           </div>
           <footer class="ui-alert-box__footer">
             <ui-button
