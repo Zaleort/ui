@@ -84,11 +84,6 @@ export default defineComponent({
       default: null,
     },
 
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-
     fixedHead: {
       type: Boolean,
       default: true,

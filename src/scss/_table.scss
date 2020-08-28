@@ -11,6 +11,7 @@
   }
 
   @include element(wrapper) {
+    position: relative;
     background-color: $white;
     border: 1px solid $border-color;
     overflow: auto;
