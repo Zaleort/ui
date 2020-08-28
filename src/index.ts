@@ -15,6 +15,7 @@ import UiFormitem from '@/components/UiFormItem.vue';
 import UiIcon from '@/components/UiIcon.vue';
 import UiInput from '@/components/UiInput.vue';
 import UiLabel from '@/components/UiLabel.vue';
+import UiLoading from '@/components/UiLoading.vue';
 import UiMain from '@/components/UiMain.vue';
 import UiMenu from '@/components/UiMenu.vue';
 import UiMenuItem from '@/components/UiMenuItem.vue';
@@ -51,6 +52,7 @@ const components = [
   UiIcon,
   UiInput,
   UiLabel,
+  UiLoading,
   UiMain,
   UiMenu,
   UiMenuItem,
