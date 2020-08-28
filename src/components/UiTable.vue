@@ -14,25 +14,32 @@
           :class="{
             'ui-table__heading': true,
             [`ui-table__heading--${size}`]: true,
-            'is-fixed': fixedHead,
+            'clickable': h.sortable,
           }"
           :style="{
             width: h.width + 'px',
             textAlign: h.align,
           }"
+          @click="h.sortable ? direction = null : null"
         >
-          {{ h.name }}
-          <div v-if="h.sortable" class="ui-table__order">
-            <ui-icon
-              icon="chevronUp"
-              size="small"
-              @click="order(h, 'ascendent')"
-            />
-            <ui-icon
-              icon="chevronDown"
-              size="small"
-              @click="order(h, 'descendent')"
-            />
+          <div class="ui-table__heading-cell">
+            {{ h.name }}
+            <div v-if="h.sortable" class="ui-table__order">
+              <ui-icon
+                icon="chevronUp"
+                size="mini"
+                class="clickable ml-2"
+                :class="{ 'text-primary': direction === 'ascendent' }"
+                @click.stop="order(h, 'ascendent')"
+              />
+              <ui-icon
+                icon="chevronDown"
+                size="mini"
+                class="clickable ml-2"
+                :class="{ 'text-primary': direction === 'descendent' }"
+                @click.stop="order(h, 'descendent')"
+              />
+            </div>
           </div>
         </th>
       </thead>
@@ -48,7 +55,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, provide } from 'vue';
+import {
+  defineComponent, PropType, provide, ref,
+} from 'vue';
 import { UiTableHeading, UiTableSortMethod } from '@/interfaces/Table';
 
 export default defineComponent({
@@ -83,24 +92,22 @@ export default defineComponent({
       type: String,
       default: null,
     },
-
-    fixedHead: {
-      type: Boolean,
-      default: true,
-    },
   },
 
   emits: ['sort'],
 
   setup(props, context) {
     provide('tableSize', props.size);
-    const order = (item: UiTableHeading, direction: string) => {
+    const direction = ref<string | null>(null);
+    const order = (item: UiTableHeading, _direction: string) => {
+      direction.value = _direction;
       if (typeof props.sortMethod === 'function') {
-        context.emit('sort', props.sortMethod(item.prop, direction));
+        context.emit('sort', props.sortMethod(item.prop, _direction));
       }
     };
 
     return {
+      direction,
       order,
     };
   },
