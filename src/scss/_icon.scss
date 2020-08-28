@@ -2,7 +2,7 @@
   transition: all 120ms ease;
 
   @include modifier(mini) {
-    width: 0.8em;
+    width: 0.7em;
   }
 
   @include modifier(small) {
