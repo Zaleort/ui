@@ -36,7 +36,7 @@
 
   @include when(hamburger) {
     position: relative;
-    transition: transform 250ms ease-in-out;
+    transition: all 250ms ease-in-out;
     width: $menu-hamburger-width;
     transform: translateX(-100%);
 
@@ -50,6 +50,21 @@
 
     @include when(visible) {
       transform: translateX(0);
+    }
+
+    @include when(collapsed) {
+      width: $menu-hamburger-collapsed;
+
+      & .ui-icon {
+        margin: 0;
+      }
+
+      & .ui-menu-item__span {
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+      }
     }
   }
 
@@ -81,13 +96,13 @@
       @include desktop {
         width: $menu-hamburger-width;
       }
-    }
-  }
 
-  @include element(collapse) {
-    cursor: pointer;
-    padding: 7px 12px;
-    margin-top: auto;
+      @include when(collapsed) {
+        @include desktop {
+          width: $menu-hamburger-collapsed;
+        }
+      }
+    }
   }
 }
 
@@ -95,8 +110,12 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding: 7px 12px;
+  padding: 0 12px;
+  height: 48px;
   transition: all 120ms ease;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 
   &:hover,
   &:focus {
@@ -108,5 +127,13 @@
   @include when(disabled) {
     opacity: 0.25;
     cursor: not-allowed;
+  }
+
+  @include modifier(collapse) {
+    margin-top: auto;
+  }
+
+  @include element(span) {
+
   }
 }
