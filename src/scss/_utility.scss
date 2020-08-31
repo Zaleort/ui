@@ -32,35 +32,35 @@
 // Margin y padding
 @for $i from 0 through 5 {
   .m-#{$i} { margin: $i * 3px; }
-  .mt-#{$i} { margin-top: $i * 3px!important; }
-  .mb-#{$i} { margin-bottom: $i * 3px!important; }
-  .ml-#{$i} { margin-left: $i * 3px!important; }
-  .mr-#{$i} { margin-right: $i * 3px!important; }
+  .mt-#{$i} { margin-top: $i * 3px; }
+  .mb-#{$i} { margin-bottom: $i * 3px; }
+  .ml-#{$i} { margin-left: $i * 3px; }
+  .mr-#{$i} { margin-right: $i * 3px; }
 
   .mx-#{$i} { 
-      margin-left: $i * 3px!important; 
-      margin-right: $i * 3px!important; 
+      margin-left: $i * 3px; 
+      margin-right: $i * 3px; 
   }
 
   .my-#{$i} { 
-      margin-top: $i * 3px!important; 
-      margin-bottom: $i * 3px!important; 
+      margin-top: $i * 3px; 
+      margin-bottom: $i * 3px; 
   }
 
   .p-#{$i} { padding: $i * 3px; }
-  .pt-#{$i} { padding-top: $i * 3px!important; }
-  .pb-#{$i} { padding-bottom: $i * 3px!important; }
-  .pl-#{$i} { padding-left: $i * 3px!important; }
-  .pr-#{$i} { padding-right: $i * 3px!important; }
+  .pt-#{$i} { padding-top: $i * 3px; }
+  .pb-#{$i} { padding-bottom: $i * 3px; }
+  .pl-#{$i} { padding-left: $i * 3px; }
+  .pr-#{$i} { padding-right: $i * 3px; }
 
   .px-#{$i} { 
-      padding-left: $i * 3px!important; 
-      padding-right: $i * 3px!important; 
+      padding-left: $i * 3px; 
+      padding-right: $i * 3px; 
   }
 
   .py-#{$i} { 
-      padding-top: $i * 3px!important; 
-      padding-bottom: $i * 3px!important; 
+      padding-top: $i * 3px; 
+      padding-bottom: $i * 3px; 
   }
 }
 
@@ -77,13 +77,13 @@
 .display-none, .hidden { display: none; }
 
 // Text color
-.text-primary { color: $primary!important; }
-.text-secondary { color: $text-secondary-color!important; }
-.text-success { color: $success!important; }
-.text-warning { color: $warning!important; }
-.text-danger { color: $danger!important; }
-.text-white { color: #fff!important; }
-.text-info { color: $info!important; }
+.text-primary { color: $primary; }
+.text-secondary { color: $text-secondary-color; }
+.text-success { color: $success; }
+.text-warning { color: $warning; }
+.text-danger { color: $danger; }
+.text-white { color: #fff; }
+.text-info { color: $info; }
 .text-dark { color: $text-color; }
 .text-indigo { color: $indigo700; }
 .text-teal { color: $teal500; }
