@@ -76,6 +76,11 @@
 .display-flex { display: flex; }
 .display-none, .hidden { display: none; }
 
+// Position
+.position-static { position: static; }
+.position-absolute { position: absolute; }
+.position-relative { position: relative; }
+
 // Text color
 .text-primary { color: $primary; }
 .text-secondary { color: $text-secondary-color; }

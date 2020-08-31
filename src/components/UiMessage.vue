@@ -1,25 +1,30 @@
 <template>
-  <teleport to="body">
-    <div
-      v-if="!isClosed"
-      :class="{
-        'ui-message': true,
-        [`ui-message--${color}`]: true,
-      }"
-    >
-      <div>
-        <div v-if="hasTitle" class="ui-message__title">
-          <slot name="title">
-            {{ title }}
-          </slot>
-        </div>
+  <div
+    v-if="!isClosed"
+    :class="{
+      'ui-message': true,
+      [`ui-message--${color}`]: true,
+    }"
+  >
+    <div>
+      <div v-if="hasTitle" class="ui-message__title">
+        <slot name="title">
+          {{ title }}
+        </slot>
+      </div>
+      <div class="ui-message__body">
+        <ui-icon
+          v-if="icon"
+          :icon="icon"
+          size="xlarge"
+        />
         <slot>{{ message }}</slot>
       </div>
-      <div v-if="closable || !duration" @click="close">
-        X
-      </div>
     </div>
-  </teleport>
+    <div v-if="closable || !duration" @click="close">
+      <ui-icon icon="close" />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -29,6 +34,11 @@ export default defineComponent({
   name: 'UiMessage',
 
   props: {
+    id: {
+      type: Number,
+      default: null,
+    },
+
     closable: {
       type: Boolean,
       default: true,
@@ -52,23 +62,15 @@ export default defineComponent({
     color: {
       type: String,
       default: 'danger',
-      validator: (value: string) => {
-        const colores = [
-          'primary',
-          'secondary',
-          'success',
-          'warning',
-          'danger',
-          'info',
-          'grey',
-        ];
+    },
 
-        return colores.indexOf(value) !== -1;
-      },
+    icon: {
+      type: String,
+      default: null,
     },
   },
   emits: {
-    closed: null,
+    close: null,
   },
 
   data() {
@@ -96,7 +98,7 @@ export default defineComponent({
   methods: {
     close() {
       this.isClosed = true;
-      this.$emit('closed', true);
+      this.$emit('close', true);
     },
   },
 });

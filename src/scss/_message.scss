@@ -1,10 +1,9 @@
 @include block(message) {
-  position: absolute;
-  top: 5vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1em;
+  margin: 5px auto;
+  padding: 12px;
   width: 300px;
   color: $grey800;
   background-color: $white;
@@ -17,13 +16,9 @@
     box-shadow: $low-shadow;
   }
 
-  @include mobile-l {
-    width: 450px;
-  }
-
   @include element(title) {
     font-weight: 500;
-    font-size: 1.1em;
+    margin-bottom: 5px;
   }
 
   @include modifier(primary) {
@@ -54,5 +49,45 @@
   @include modifier(info) {
     color: $white;
     background-color: $info;
+  }
+
+  @include element(body) {
+    display: flex;
+    font-size: 0.9em;
+  }
+
+  @include element(container) {
+    position: fixed;
+    top: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @include desktop {
+      left: unset;
+      transform: unset;
+      right: 7px;
+    }
+  }
+}
+
+.ui-message-enter-active {
+  transition: all 220ms ease-out;
+}
+
+.ui-message-leave-active {
+  transition: all 220ms ease-in;
+}
+
+.ui-message-enter-from, .ui-message-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+
+  @include desktop {
+    transform: translateX(30px);
   }
 }

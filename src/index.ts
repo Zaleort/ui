@@ -19,7 +19,8 @@ import UiLoading from '@/components/UiLoading.vue';
 import UiMain from '@/components/UiMain.vue';
 import UiMenu from '@/components/UiMenu.vue';
 import UiMenuItem from '@/components/UiMenuItem.vue';
-import UiMessage from '@/lib/message';
+import UiMessage from '@/components/UiMessage.vue';
+import UiMessages from '@/components/UiMessages.vue';
 import UiOption from '@/components/UiOption.vue';
 import UiRow from '@/components/UiRow.vue';
 import UiSelect from '@/components/UiSelect.vue';
@@ -56,6 +57,8 @@ const components = [
   UiMain,
   UiMenu,
   UiMenuItem,
+  UiMessage,
+  UiMessages,
   UiOption,
   UiRow,
   UiSelect,
