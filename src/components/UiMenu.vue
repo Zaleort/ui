@@ -1,6 +1,6 @@
 <script>
 import {
-  defineComponent, h, withModifiers, ref, onMounted, onUnmounted, render,
+  defineComponent, h, withModifiers, ref, onMounted, onUnmounted,
 } from 'vue';
 
 export default defineComponent({
@@ -97,8 +97,9 @@ export default defineComponent({
 
     if (this.collapsed !== null) {
       const collapse = h(
-        <div onClick={this.collapse} class="ui-menu__collapse">
-          <span>
+        <div onClick={this.collapse} class="ui-menu-item ui-menu-item--collapse">
+          <ui-icon icon={this.collapsed ? 'chevronRight' : 'chevronLeft'} class="mr-2" />
+          <span class="ui-menu-item__span">
             Colapsar
           </span>
         </div>,
@@ -114,6 +115,7 @@ export default defineComponent({
           class={{
             'ui-menu__mask': true,
             'is-visible': this.visible,
+            'is-collapsed': this.collapsed,
           }}
           onClick={this.close}
         />, [nav],

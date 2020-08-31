@@ -4,7 +4,12 @@
     class="ui-menu-item"
     @click="action; close"
   >
-    <span>
+    <ui-icon
+      v-if="icon"
+      :icon="icon"
+      class="mr-2"
+    />
+    <span class="ui-menu-item__span">
       <slot />
     </span>
   </div>
@@ -15,7 +20,12 @@
     class="ui-menu-item"
     @click="close"
   >
-    <span>
+    <ui-icon
+      v-if="icon"
+      :icon="icon"
+      class="mr-2"
+    />
+    <span class="ui-menu-item__span">
       <slot />
     </span>
   </router-link>
@@ -26,7 +36,12 @@
     class="ui-menu-item"
     @click="close"
   >
-    <span>
+    <ui-icon
+      v-if="icon"
+      :icon="icon"
+      class="mr-2"
+    />
+    <span class="ui-menu-item__span">
       <slot />
     </span>
   </a>
@@ -50,6 +65,11 @@ export default defineComponent({
 
     action: {
       type: Function,
+      default: null,
+    },
+
+    icon: {
+      type: String,
       default: null,
     },
   },
