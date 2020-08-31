@@ -1,5 +1,5 @@
 @include block(icon) {
-  transition: all 120ms ease;
+  text-align: center;
 
   @include modifier(mini) {
     width: 0.7em;
