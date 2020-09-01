@@ -16,13 +16,14 @@
         <ui-icon
           v-if="icon"
           :icon="icon"
-          size="xlarge"
+          size="large"
+          class="mr-2"
         />
         <slot>{{ message }}</slot>
       </div>
     </div>
     <div v-if="closable || !duration" @click="close">
-      <ui-icon icon="close" />
+      <ui-icon icon="close" class="clickable" />
     </div>
   </div>
 </template>
