@@ -60,10 +60,10 @@
       }
 
       & .ui-menu-item__span {
-        width: 0;
-        height: 0;
+        transition-timing-function: ease-in;
+        opacity: 0;
         overflow: hidden;
-        visibility: hidden;
+        width: 0;
       }
     }
   }
@@ -134,6 +134,15 @@
   }
 
   @include element(span) {
+    transition: all 220ms ease-out;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 
+  .ui-icon {
+    transition: margin 300ms ease;
+    flex-shrink: 0;
   }
 }
