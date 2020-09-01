@@ -29,14 +29,14 @@
                 icon="chevronUp"
                 size="mini"
                 class="clickable ml-2"
-                :class="{ 'text-primary': direction === 'ascendent' }"
+                :class="{ 'text-primary': direction === 'ascendent' && sortedProp === h.prop }"
                 @click.stop="order(h, 'ascendent')"
               />
               <ui-icon
                 icon="chevronDown"
                 size="mini"
                 class="clickable ml-2"
-                :class="{ 'text-primary': direction === 'descendent' }"
+                :class="{ 'text-primary': direction === 'descendent' && sortedProp === h.prop }"
                 @click.stop="order(h, 'descendent')"
               />
             </div>
@@ -69,8 +69,8 @@ export default defineComponent({
     },
 
     items: {
-      type: Array,
-      required: true,
+      type: Array as PropType<any[]>,
+      default: null,
     },
 
     sortMethod: {
@@ -94,20 +94,99 @@ export default defineComponent({
     },
   },
 
-  emits: ['sort'],
+  emits: ['sort', 'update:items'],
 
   setup(props, context) {
     provide('tableSize', props.size);
+
     const direction = ref<string | null>(null);
+    const sortedProp = ref<string>('');
+
+    const checkType = (propName: string) => {
+      if (!props.items || typeof props.items[0][propName] === 'undefined') {
+        return undefined;
+      }
+
+      const prop = props.items[0][propName];
+
+      if (typeof prop === 'string') return 'string';
+      if (typeof prop === 'number' && !isNaN(prop)) return 'number';
+      if (typeof prop === 'object') return 'object';
+
+      return null;
+    };
+
+    const sortAsc = (x: any, y: any) => {
+      const a = x[sortedProp.value];
+      const b = y[sortedProp.value];
+      const type = checkType(sortedProp.value);
+      if (type === 'number') {
+        if (a > b) return 1;
+        if (a < b) return -1;
+        if (a === b) return 0;
+      }
+
+      if (type === 'string') {
+        return a.localeCompare(b);
+      }
+
+      if (type === 'object') {
+        return a.toString().localeCompare(b.toString());
+      }
+
+      return 0;
+    };
+
+    const sortDesc = (x: any, y: any) => {
+      const a = x[sortedProp.value];
+      const b = y[sortedProp.value];
+      const type = checkType(sortedProp.value);
+      if (type === 'number') {
+        if (a > b) return -1;
+        if (a < b) return 1;
+        if (a === b) return 0;
+      }
+
+      if (type === 'string') {
+        return b.localeCompare(a);
+      }
+
+      if (type === 'object') {
+        return b.toString().localeCompare(a.toString());
+      }
+
+      return 0;
+    };
+
     const order = (item: UiTableHeading, _direction: string) => {
       direction.value = _direction;
+      sortedProp.value = item.prop;
+
+      if (!props.items || props.items.length === 0 || typeof props.items[0][item.prop] === 'undefined') {
+        return;
+      }
+
       if (typeof props.sortMethod === 'function') {
         context.emit('sort', props.sortMethod(item.prop, _direction));
+        return;
+      }
+
+      if (_direction === 'ascendent') {
+        const _items = props.items;
+        context.emit('update:items', _items.sort(sortAsc));
+        context.emit('sort', _items);
+      } else if (_direction === 'descendent') {
+        const _items = props.items;
+        context.emit('update:items', _items.sort(sortDesc));
+        context.emit('sort', _items);
       }
     };
 
     return {
       direction,
+      sortedProp,
+      sortAsc,
+      sortDesc,
       order,
     };
   },
