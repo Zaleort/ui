@@ -30,6 +30,7 @@ module.exports = {
     "no-param-reassign": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
     "arrow-parens": "off",
+    "no-restricted-globals": "off",
   },
   overrides: [
     {
