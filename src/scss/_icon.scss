@@ -1,4 +1,5 @@
 @include block(icon) {
+  transition: transform 90ms ease-out;
   text-align: center;
 
   @include modifier(mini) {
@@ -53,7 +54,12 @@
     & g { fill: $text-secondary-color; }
   }
 
-  @for $i from 2 to 5 {
+  @include modifier(reverse) {
+    transition-timing-function: ease-in;
+    transform: rotateY(180deg);
+  }
+
+  @for $i from 2 through 5 {
     @include modifier('x' + $i) {
       width: $i * 1em;
     }

@@ -55,15 +55,9 @@
     @include when(collapsed) {
       width: $menu-hamburger-collapsed;
 
-      & .ui-icon {
-        margin: 0;
-      }
-
       & .ui-menu-item__span {
         transition-timing-function: ease-in;
         opacity: 0;
-        overflow: hidden;
-        width: 0;
       }
     }
   }
@@ -134,15 +128,14 @@
   }
 
   @include element(span) {
-    transition: all 220ms ease-out;
-    width: 100%;
+    transition: opacity 220ms ease-out;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
   }
 
   .ui-icon {
-    transition: margin 300ms ease;
+    transition: transform 220ms ease-out;
     flex-shrink: 0;
   }
 }

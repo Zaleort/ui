@@ -98,7 +98,13 @@ export default defineComponent({
     if (this.collapsed !== null) {
       const collapse = h(
         <div onClick={this.collapse} class="ui-menu-item ui-menu-item--collapse">
-          <ui-icon icon={this.collapsed ? 'chevronRight' : 'chevronLeft'} class="mr-2" />
+          <ui-icon
+            icon={'angleDoubleLeft'}
+            class={{
+              'mr-2': true,
+              'ui-icon--reverse': this.collapsed,
+            }}
+            />
           <span class="ui-menu-item__span">
             Colapsar
           </span>
