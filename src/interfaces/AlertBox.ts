@@ -1,5 +1,6 @@
 export interface UiAlertBoxOptions {
   type: string;
+  closeOnMask: boolean;
   okButton: string;
   okButtonColor: string;
   okButtonAction: Function | undefined;

@@ -4,7 +4,7 @@
       <div
         v-if="show"
         class="ui-alert-box__mask"
-        @click="alertCancel"
+        @click="closeOnMask ? alertCancel() : null"
       >
         <div
           :class="{
@@ -57,6 +57,11 @@ export default defineComponent({
     type: {
       type: String,
       default: 'error',
+    },
+
+    closeOnMask: {
+      type: Boolean,
+      default: true,
     },
 
     okButton: {

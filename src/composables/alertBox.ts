@@ -8,6 +8,7 @@ export default () => {
   const showAlertBox = ref(false);
   const alertDefaultOptions = reactive({
     type: 'error',
+    closeOnMask: true,
     okButton: 'OK',
     okButtonColor: 'primary',
     okButtonAction: undefined,
