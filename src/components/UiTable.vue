@@ -101,6 +101,7 @@ export default defineComponent({
 
     const direction = ref<string | null>(null);
     const sortedProp = ref<string>('');
+    const innerItems = ref(props.items);
 
     const checkType = (propName: string) => {
       if (!props.items || typeof props.items[0][propName] === 'undefined') {
@@ -172,13 +173,11 @@ export default defineComponent({
       }
 
       if (_direction === 'ascendent') {
-        const _items = props.items;
-        context.emit('update:items', _items.sort(sortAsc));
-        context.emit('sort', _items);
+        innerItems.value.sort(sortAsc);
+        context.emit('sort', innerItems.value);
       } else if (_direction === 'descendent') {
-        const _items = props.items;
-        context.emit('update:items', _items.sort(sortDesc));
-        context.emit('sort', _items);
+        innerItems.value.sort(sortDesc);
+        context.emit('sort', innerItems.value);
       }
     };
 
