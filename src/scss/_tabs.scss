@@ -11,7 +11,7 @@
   }
 
   @include element(nav) {
-    border-bottom: 1px solid $border-color;
+    background-color: $grey200;
     margin-bottom: 1em;
 
     @include element(tab) {
@@ -19,7 +19,7 @@
       padding: 7px 16px;
       cursor: pointer;
       transition: all 90ms ease;
-      color: $text-secondary-color;
+      color: $text-color;
       font-weight: 500;
 
       &:hover {
@@ -27,6 +27,7 @@
       }
 
       @include when(active) {
+        background-color: $white;
         color: $primary;
       }
     }
