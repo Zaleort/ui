@@ -36,6 +36,7 @@
               v-if="showCancelButton"
               :color="cancelButtonColor"
               size="small"
+              class="mr-2"
               @click="alertCancel(cancelButtonAction)"
             >
               {{ cancelButton }}
