@@ -1,0 +1,64 @@
+@include block(progress) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  transition: background-color 220ms ease, width 220ms ease-out;
+  height: 34px;
+
+  @if ($is-rounded) {
+    border-radius: $radius;
+  }
+
+  @include modifier(large) { height: 42px; }
+  @include modifier(small) { height: 24px; }
+  @include modifier(mini) {
+    font-size: 0.9em; 
+    height: 16px; 
+  }
+
+  @include modifier(primary) { background-color: $primary; }
+  @include modifier(secondary) { background-color: $secondary; }
+  @include modifier(danger) { background-color: $danger; }
+  @include modifier(warning) { background-color: $warning; }
+  @include modifier(success) { background-color: $success; }
+  @include modifier(info) { background-color: $info; }
+  @include modifier(grey) { background-color: $grey500; }
+
+  @include element(container) {
+    position: relative;
+    background-color: $white;
+    border: 1px solid $border-color;
+    width: 100%;
+    overflow: hidden;
+
+    @include when(pill) {
+      &, .ui-progress {
+        border-radius: 50px;
+      }
+    }
+
+    @include when(loading) {
+      &::after {
+        content: ' ';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        animation-duration: 1200ms;
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+        animation-name: loading-background-animation;
+        animation-timing-function: linear;
+        background: linear-gradient(to right, #F5F5F500 3%, #FFFFFF40 25%, #F5F5F500 45%);
+        background-size: 150%;
+      }
+    }
+  }
+
+  @include element(span) {
+    display: inline-block;
+    color: $white;
+    padding: 0 7px;
+  }
+}

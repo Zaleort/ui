@@ -22,6 +22,7 @@ import UiMenuItem from '@/components/UiMenuItem.vue';
 import UiMessage from '@/components/UiMessage.vue';
 import UiMessages from '@/components/UiMessages.vue';
 import UiOption from '@/components/UiOption.vue';
+import UiProgress from '@/components/UiProgress.vue';
 import UiRow from '@/components/UiRow.vue';
 import UiSelect from '@/components/UiSelect.vue';
 import UiSwitch from '@/components/UiSwitch.vue';
@@ -60,6 +61,7 @@ const components = [
   UiMessage,
   UiMessages,
   UiOption,
+  UiProgress,
   UiRow,
   UiSelect,
   UiSwitch,

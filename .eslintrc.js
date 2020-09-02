@@ -29,6 +29,7 @@ module.exports = {
     "lines-between-class-members": ["error", "always", { exceptAfterSingleLine: true }],
     "no-param-reassign": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/no-empty-function": "off",
     "arrow-parens": "off",
     "no-restricted-globals": "off",
   },
