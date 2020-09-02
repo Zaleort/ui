@@ -26,16 +26,16 @@
             {{ h.name }}
             <div v-if="h.sortable" class="ui-table__order">
               <ui-icon
-                icon="chevronUp"
+                icon="angleUp"
                 size="mini"
-                class="clickable ml-2"
+                class="clickable ml-3"
                 :class="{ 'text-primary': direction === 'ascendent' && sortedProp === h.prop }"
                 @click.stop="order(h, 'ascendent')"
               />
               <ui-icon
-                icon="chevronDown"
+                icon="angleDown"
                 size="mini"
-                class="clickable ml-2"
+                class="clickable ml-3"
                 :class="{ 'text-primary': direction === 'descendent' && sortedProp === h.prop }"
                 @click.stop="order(h, 'descendent')"
               />
