@@ -44,6 +44,11 @@
       }
     }
 
+    @include when(focus) {
+      border-color: $primary;
+      outline: unset;
+    }
+
     @include when(checked) {
       border-color: $primary;
 
@@ -55,13 +60,13 @@
         border-left-width: 3px;
         border-bottom-width: 3px;
       }
+    }
 
-      @include when(disabled) {
+    @include when(disabled) {
+      border-color: $primary300;
+
+      &::after {
         border-color: $primary300;
-
-        &::after {
-          border-color: $primary300;
-        }
       }
     }
   }

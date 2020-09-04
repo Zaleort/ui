@@ -15,6 +15,10 @@
         'is-checked': checked,
         'is-focus': focus
       }"
+      tabindex="0"
+      @focus="focus = true"
+      @blur="focus = false"
+      @keyup.space="$emit('update:checked', !checkValue)"
     >
       <input
         v-model="checkValue"
@@ -23,8 +27,6 @@
         :disabled="isDisabled"
         :value="label"
         :name="name"
-        @focus="focus = true"
-        @blur="focus = false"
       >
     </span>
     <span v-if="hasLabel" class="ui-checkbox__label">
