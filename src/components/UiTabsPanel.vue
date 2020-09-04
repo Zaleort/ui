@@ -18,7 +18,6 @@ export default defineComponent({
 
   setup(props) {
     const activeName = inject<any>('activeName');
-    console.log(activeName);
     const active = computed(() => props.name === activeName.value);
 
     return {

@@ -32,6 +32,7 @@ module.exports = {
     "@typescript-eslint/no-empty-function": "off",
     "arrow-parens": "off",
     "no-restricted-globals": "off",
+    "no-plusplus": "off",
   },
   overrides: [
     {
