@@ -53,7 +53,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, inject } from 'vue';
+import {
+  defineComponent, computed, ref, reactive, watch, onMounted,
+} from 'vue';
+import useFormInject from '@/composables/formInject';
 
 interface UiSelectOption {
   value: any;
@@ -160,209 +163,202 @@ export default defineComponent({
 
   emits: ['update:value'],
 
-  setup() {
-    const formDisabled = inject('formDisabled', false);
-    const formSize = inject('formSize', null);
-    const formValidators = inject('formValidators');
-    const formValidateOn = inject('formValidateOn', 'submit');
-
-    return {
+  setup(props, context) {
+    const inputValue = ref('');
+    const currentPlaceholder = ref(props.placeholder);
+    const cachedCurrentPlaceholder = ref('');
+    const options = reactive<UiSelectOption[]>([]);
+    let selected = props.multiple ? reactive<UiSelectOption[]>([]) : reactive<UiSelectOption | any>({});
+    const filteredOptionsCount = ref(0);
+    const visible = ref(false);
+    const {
       formDisabled,
       formSize,
-      formValidators,
       formValidateOn,
-    };
-  },
+      formValidators,
+    } = useFormInject();
 
-  data() {
-    return {
-      visible: false,
-      inputValue: '',
-      currentPlaceholder: this.placeholder,
-      cachedCurrentPlaceholder: '',
-      selected: this.multiple ? [] : {} as UiSelectOption | UiSelectOption[],
-      options: [] as UiSelectOption[],
-      filteredOptionsCount: 0,
-    };
-  },
+    const isDisabled = computed(() => props.disabled || formDisabled);
+    const inputSize = computed(() => props.size || formSize);
+    const inputValidateOn = computed(() => props.validateOn || formValidateOn);
+    const hasPrepend = computed(() => !!context.slots.prepend || props.multiple);
 
-  computed: {
-    hasPrepend(): boolean {
-      return !!this.$slots.prepend || this.multiple;
-    },
-
-    emptyText(): string | null {
-      if (this.loading) {
+    const emptyText = computed(() => {
+      if (props.loading) {
         return 'Cargando...';
       }
 
-      if (this.remote && this.inputValue === '' && this.options.length === 0) {
+      if (props.remote && inputValue.value === '' && options.length === 0) {
         return null;
       }
 
-      if (this.filterable && this.inputValue && this.options.length > 0 && this.filteredOptionsCount === 0) {
+      if (props.filterable && inputValue.value && options.length > 0 && filteredOptionsCount.value === 0) {
         return 'Sin resultados';
       }
 
-      if (this.options.length === 0) {
+      if (options.length === 0) {
         return 'Sin opciones';
       }
 
       return null;
-    },
-
-    showCreatedOption(): boolean {
-      const hasExistingOption = this.options.filter(option => !option.created)
-        .some(option => option.label === this.inputValue);
-      return this.filterable && this.allowCreate && this.inputValue !== '' && !hasExistingOption;
-    },
-
-    isDisabled(): boolean {
-      return this.disabled || this.formDisabled;
-    },
-
-    inputSize(): string {
-      return this.size || this.formSize || 'normal';
-    },
-
-    inputValidateOn(): string {
-      return this.validateOn || this.formValidateOn;
-    },
-  },
-
-  watch: {
-    visible() {
-      if (!this.filterable) {
-        return;
-      }
-
-      if (this.visible) {
-        this.cachedCurrentPlaceholder = this.inputValue;
-        this.currentPlaceholder = this.inputValue;
-        this.inputValue = '';
-        return;
-      }
-
-      if (!Array.isArray(this.selected)) {
-        this.currentPlaceholder = this.placeholder;
-        this.inputValue = this.selected.label;
-      } else {
-        this.currentPlaceholder = '';
-        this.inputValue = '';
-      }
-    },
-  },
-
-  created() {
-    if (typeof this.formValidators === 'function' && typeof this.validator === 'function') {
-      this.formValidators(this.validator);
-    }
-  },
-
-  mounted() {
-    this.filteredOptionsCount = this.options.length;
-
-    if (!this.value) {
-      return;
-    }
-
-    if (this.multiple && Array.isArray(this.value)) {
-      this.value.forEach((v: any) => {
-        this.options.forEach(o => {
-          if (o.value === v || o.value[this.valueKey] === v) {
-            this.addSelectedValue(o);
-          }
-        });
-      });
-
-      return;
-    }
-
-    this.options.some(o => {
-      if (o.value === this.value || o.value[this.valueKey] === this.value) {
-        this.addSelectedValue(o);
-        return true;
-      }
-
-      return false;
     });
-  },
 
-  methods: {
-    toggle() {
-      if (!this.disabled) {
-        this.visible = !this.visible;
-      }
-    },
+    const showCreatedOption = computed(() => {
+      const hasExistingOption = options.filter(option => !option.created)
+        .some(option => option.label === inputValue.value);
+      return props.filterable && props.allowCreate && inputValue.value !== '' && !hasExistingOption;
+    });
 
-    close() {
-      this.visible = false;
-    },
-
-    handleInput() {
-      if (this.remote && typeof this.remoteMethod === 'function') {
-        this.remoteMethod(this.inputValue);
-      }
-
-      if (typeof this.validator === 'function' && this.inputValidateOn === 'input') {
-        this.validator();
-      }
-    },
-
-    handleChange() {
-      if (this.remote && typeof this.remoteMethod === 'function') {
-        this.remoteMethod(this.inputValue);
-      }
-
-      if (typeof this.validator === 'function' && this.inputValidateOn === 'change') {
-        this.validator();
-      }
-    },
-
-    addOption(option: UiSelectOption) {
-      this.options.push(option);
-    },
-
-    removeOption(option: UiSelectOption) {
-      const i = this.options.findIndex(o => o.key === option.key);
+    const addOption = (option: UiSelectOption) => options.push(option);
+    const removeOption = (option: UiSelectOption) => {
+      const i = options.findIndex(o => o.key === option.key);
 
       if (i >= 0) {
-        this.options.splice(i, 1);
+        options.splice(i, 1);
       }
-    },
+    };
 
-    addOptionCount() {
-      this.filteredOptionsCount += 1;
-    },
-
-    substractOptionCount() {
-      this.filteredOptionsCount -= 1;
-    },
-
-    addSelectedValue(val: UiSelectOption) {
-      if (this.multiple && Array.isArray(this.selected)) {
-        this.selected.push(val);
-        this.$emit('update:value', this.selected.map(s => s.value));
-        this.inputValue = '';
+    const addSelectedValue = (val: UiSelectOption) => {
+      if (props.multiple && Array.isArray(selected)) {
+        selected.push(val);
+        context.emit('update:value', selected.map(s => s.value));
+        inputValue.value = '';
       } else {
-        this.selected = val;
-        this.$emit('update:value', this.selected.value);
-        this.inputValue = val.label;
+        selected = reactive(val);
+        context.emit('update:value', selected.value);
+        inputValue.value = val.label;
       }
-    },
+    };
 
-    removeSelectedValue(val: UiSelectOption) {
-      if (this.multiple && Array.isArray(this.selected)) {
-        const i = this.selected.findIndex((v: any) => v.key === val.key);
-        this.selected.splice(i, 1);
-        this.$emit('update:value', this.selected.map(s => s.value));
+    const removeSelectedValue = (val: UiSelectOption) => {
+      if (props.multiple && Array.isArray(selected)) {
+        const i = selected.findIndex((v: any) => v.key === val.key);
+        selected.splice(i, 1);
+        context.emit('update:value', selected.map(s => s.value));
       } else {
-        this.selected = {} as UiSelectOption;
-        this.$emit('update:value', null);
+        selected = {} as UiSelectOption;
+        context.emit('update:value', null);
       }
 
-      this.inputValue = '';
-    },
+      inputValue.value = '';
+    };
+
+    const addOptionCount = () => filteredOptionsCount.value += 1;
+    const substractOptionCount = () => filteredOptionsCount.value -= 1;
+
+    const toggle = () => {
+      if (!props.disabled) {
+        visible.value = !visible.value;
+      }
+    };
+
+    const close = () => {
+      visible.value = false;
+    };
+
+    watch(visible, () => {
+      if (!props.filterable) {
+        return;
+      }
+
+      if (visible.value) {
+        cachedCurrentPlaceholder.value = inputValue.value;
+        currentPlaceholder.value = inputValue.value;
+        inputValue.value = '';
+        return;
+      }
+
+      if (!Array.isArray(selected)) {
+        currentPlaceholder.value = props.placeholder;
+        inputValue.value = selected.label;
+      } else {
+        currentPlaceholder.value = '';
+        inputValue.value = '';
+      }
+    });
+
+    const handleInput = () => {
+      if (props.remote && typeof props.remoteMethod === 'function') {
+        props.remoteMethod(inputValue.value);
+      }
+
+      if (typeof props.validator === 'function' && inputValidateOn.value === 'input') {
+        props.validator();
+      }
+    };
+
+    const handleChange = () => {
+      if (props.remote && typeof props.remoteMethod === 'function') {
+        props.remoteMethod(inputValue.value);
+      }
+
+      if (typeof props.validator === 'function' && inputValidateOn.value === 'change') {
+        props.validator();
+      }
+    };
+
+    onMounted(() => {
+      filteredOptionsCount.value = options.length;
+
+      if (!props.value) {
+        return;
+      }
+
+      if (props.multiple && Array.isArray(props.value)) {
+        props.value.forEach((v: any) => {
+          options.forEach(o => {
+            if (o.value === v || o.value[props.valueKey] === v) {
+              addSelectedValue(o);
+            }
+          });
+        });
+
+        return;
+      }
+
+      options.some(o => {
+        if (o.value === props.value || o.value[props.valueKey] === props.value) {
+          addSelectedValue(o);
+          return true;
+        }
+
+        return false;
+      });
+    });
+
+    if (typeof formValidators === 'function' && typeof props.validator === 'function') {
+      formValidators(props.validator);
+    }
+
+    return {
+      visible,
+      inputValue,
+      currentPlaceholder,
+      cachedCurrentPlaceholder,
+      selected,
+      options,
+      isDisabled,
+      inputSize,
+      inputValidateOn,
+      filteredOptionsCount,
+      emptyText,
+      hasPrepend,
+      addOption,
+      removeOption,
+      addOptionCount,
+      substractOptionCount,
+      addSelectedValue,
+      removeSelectedValue,
+      toggle,
+      close,
+      showCreatedOption,
+      formDisabled,
+      formSize,
+      formValidateOn,
+      formValidators,
+      handleInput,
+      handleChange,
+    };
   },
 });
 </script>
