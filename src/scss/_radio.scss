@@ -1,0 +1,95 @@
+@include block(radio) {
+  display: inline-flex;
+  color: $text-color;
+  cursor: pointer;
+  white-space: nowrap;
+  outline: none;
+  margin-right: 30px;
+
+  @include when(bordered) {
+    padding: 7px 12px;
+    border: 1px solid $border-color;
+
+    &.is-checked {
+      border-color: $primary;
+    }
+
+    &.is-disabled {
+      cursor: not-allowed;
+    }
+
+    & + .ui-radio.is-bordered {
+      margin-left: 10px;
+    }
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:focus .ui-radio__inner {
+    border-color: $primary;
+  }
+
+  @include element(input) {
+    cursor: pointer;
+    outline: none;
+    position: relative;
+
+    @include when(checked) {
+      .ui-radio__inner {
+        border-color: $primary;
+        background: $grey50;
+
+        &::after {
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+    }
+
+    @include when(focus) {
+      .ui-radio__inner {
+        border-color: $primary;
+      }
+    }
+  }
+
+  @include element(inner) {
+    border: 1px solid $border-color;
+    border-radius: 100%;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+
+    &::after {
+      border-radius: 100%;
+      width: 10px;
+      height: 10px;
+      background-color: $primary;
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 90ms ease-in;
+    }
+  }
+
+  @include element(original) {
+    opacity: 0;
+    outline: none;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+  }
+
+  @include element(label) {
+    padding-left: 5px;
+  }
+}
