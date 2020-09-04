@@ -3,12 +3,21 @@
   display: inline-flex;
   user-select: none;
 
+  &:hover .ui-checkbox__input {
+    border-color: $primary;
+  }
+
   @include when(border) {
+    transition: all 70ms ease-in;
     padding: 7px 12px;
     border: 1px solid $border-color;
 
     @if ($is-rounded) {
       border-radius: $radius;
+    }
+
+    &:hover {
+      border-color: $primary;
     }
   }
 

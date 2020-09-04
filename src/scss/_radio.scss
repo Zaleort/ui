@@ -6,6 +6,10 @@
   outline: none;
   margin-right: 30px;
 
+  &:hover .ui-radio__inner {
+    border-color: $primary;
+  }
+
   @include when(bordered) {
     padding: 7px 12px;
     border: 1px solid $border-color;
@@ -62,6 +66,7 @@
     position: relative;
     cursor: pointer;
     display: inline-block;
+    transition: all 70ms ease-in;
 
     &::after {
       border-radius: 100%;
