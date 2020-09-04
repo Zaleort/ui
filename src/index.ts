@@ -34,6 +34,9 @@ import UiTabsPanel from '@/components/UiTabsPanel.vue';
 import UiTag from '@/components/UiTag.vue';
 import UiTopbar from '@/components/UiTopbar.vue';
 import UiTooltip from '@/components/UiTooltip.vue';
+import UiUpload from '@/components/UiUpload.vue';
+import UiUploadDragger from '@/components/UiUploadDragger.vue';
+import UiUploadList from '@/components/UiUploadList.vue';
 import { App } from 'vue';
 
 const components = [
@@ -73,6 +76,9 @@ const components = [
   UiTag,
   UiTopbar,
   UiTooltip,
+  UiUpload,
+  UiUploadDragger,
+  UiUploadList,
 ];
 
 export default {

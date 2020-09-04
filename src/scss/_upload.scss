@@ -1,0 +1,117 @@
+@include block(upload) {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+
+  @include element(input) {
+    display: none;
+  }
+}
+
+@include block(upload-dragger) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border: 1px dashed $border-color;
+  width: 100%;
+  padding: 12px;
+  min-height: 64px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  color: $primary;
+
+  @if ($is-rounded) {
+    border-radius: $radius;
+  }
+
+  transition: border 90ms ease-out;
+  &:hover, &:focus {
+    transition-timing-function: ease-in;
+    border-color: $primary;
+  }
+}
+
+@include block(upload-list) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include element(item) {
+    transition: all 220ms cubic-bezier(.55,0,.1,1);
+    font-size: 0.9em;
+    color: $text-color;
+    margin-top: 5px;
+    position: relative;
+    width: 100%;
+
+    &:first-child {
+      margin-top: 1em;
+    }
+    
+    &:hover {
+      background-color: $grey50;
+    }
+
+    & .ui-progress {
+      height: 5px;
+    }
+
+    & .ui-progress__container {
+      margin-top: 3px;
+    }
+
+    @include when(success) {
+      .ui-upload-list__item-status-label {
+        display: block;
+      }
+
+      .ui-upload-list__item-name:hover, .ui-upload-list__item-name:focus {
+        color: $primary;
+        cursor: pointer;
+      }
+
+      &:hover, &:focus {
+        .ui-upload-list__item-status-label {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @include when(disabled) {
+    .ui-upload-list__item:hover .ui-upload-list__item-status-label {
+      display: block;
+    }
+  }
+
+  @include element(item-name) {
+    color: $text-color;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 90ms;
+    white-space: nowrap;
+
+    & .ui-icon {
+      margin-right: 3px;
+    }
+  }
+
+  @include element(item-status-label) {
+    display: none;
+  }
+
+  @include element(item-delete) {
+    display: none;
+
+    &:hover {
+      color: $primary;
+    }
+  }
+}
