@@ -10,6 +10,7 @@
       :class="{
         'ui-progress': true,
         [`ui-progress--${barColor}`]: true,
+        [`ui-progress--${size}`]: true,
       }"
       :style="'width: ' + relativePercentage + '%;'"
     >
@@ -63,6 +64,11 @@ export default defineComponent({
     loading: {
       type: Boolean,
       default: false,
+    },
+
+    size: {
+      type: String,
+      default: 'normal',
     },
   },
 
