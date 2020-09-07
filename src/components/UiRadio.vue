@@ -45,7 +45,7 @@
 </template>
 <script lang="ts">
 import {
-  defineComponent, ref, inject, computed,
+  defineComponent, ref, inject, computed, ComputedRef,
 } from 'vue';
 import useFormInject from '@/composables/formInject';
 
@@ -88,12 +88,12 @@ export default defineComponent({
   setup(props, context) {
     const radio = ref<HTMLInputElement | null>(null);
     const focus = ref(false);
-    const groupValue = inject<any | null>('groupValue', null);
-    const groupUpdateValue = inject<Function>('groupUpdateValue', () => {});
-    const groupHandleChange = inject<Function>('groupHandleChange', () => {});
-    const groupSize = inject<string | null>('groupSize', null);
-    const groupDisabled = inject('groupDisabled', false);
-    const isGroup = false;
+    const groupValue = inject<ComputedRef | null>('groupValue', null);
+    const groupUpdateValue = inject<Function | null>('groupUpdateValue', null);
+    const groupHandleChange = inject<Function | null>('groupHandleChange', null);
+    const groupSize = inject<ComputedRef | null>('groupSize', null);
+    const groupDisabled = inject<ComputedRef | null>('groupDisabled', null);
+    const isGroup = typeof groupUpdateValue === 'function' && typeof groupHandleChange === 'function';
 
     const {
       formDisabled,
@@ -101,10 +101,10 @@ export default defineComponent({
     } = useFormInject();
 
     const model = computed({
-      get: () => (isGroup ? groupValue : props.value),
+      get: () => (isGroup ? groupValue?.value : props.value),
       set: (val) => {
         if (isGroup) {
-          groupUpdateValue(val);
+          groupUpdateValue!(val);
         } else {
           context.emit('update:value', val);
         }
@@ -115,14 +115,14 @@ export default defineComponent({
       },
     });
 
-    const radioSize = computed(() => props.size || groupSize || formSize);
-    const isDisabled = computed(() => props.disabled || groupDisabled || formDisabled);
+    const radioSize = computed(() => props.size || groupSize?.value || formSize);
+    const isDisabled = computed(() => props.disabled || groupDisabled?.value || formDisabled);
     const tabIndex = computed(() => ((isDisabled.value || (isGroup && model.value !== props.label)) ? -1 : 0));
 
     const handleChange = () => {
       context.emit('change', model.value);
       if (isGroup) {
-        groupHandleChange(model.value);
+        groupHandleChange!(model.value);
       }
     };
 
