@@ -41,6 +41,17 @@
       background-color: $primary200;
       border-color: $primary200;
     }
+
+    @include when(plain) {
+      color: $primary;
+      background-color: $primary50;
+
+      &:hover, &:focus {
+        color: $white;
+        background-color: $primary;
+        border-color: $primary;
+      }
+    }
   }
 
   @include modifier(secondary) {
@@ -56,6 +67,17 @@
     &:disabled {
       background-color: $secondary200;
       border-color: $secondary200;
+    }
+
+    @include when(plain) {
+      color: $secondary;
+      background-color: $secondary50;
+
+      &:hover, &:focus {
+        color: $white;
+        background-color: $secondary;
+        border-color: $secondary;
+      }
     }
   }
 
@@ -73,6 +95,17 @@
       background-color: $success-light;
       border-color: $success-light;
     }
+
+    @include when(plain) {
+      color: $success;
+      background-color: $success-light;
+
+      &:hover, &:focus {
+        color: $white;
+        background-color: $success;
+        border-color: $success;
+      }
+    }
   }
 
   @include modifier(warning) {
@@ -88,6 +121,17 @@
     &:disabled {
       background-color: $warning-light;
       border-color: $warning-light;
+    }
+
+    @include when(plain) {
+      color: $warning;
+      background-color: $warning-light;
+
+      &:hover, &:focus {
+        color: $white;
+        background-color: $warning;
+        border-color: $warning;
+      }
     }
   }
 
@@ -105,6 +149,17 @@
       background-color: $danger-light;
       border-color: $danger-light;
     }
+
+    @include when(plain) {
+      color: $danger;
+      background-color: $danger-light;
+
+      &:hover, &:focus {
+        color: $white;
+        background-color: $danger;
+        border-color: $danger;
+      }
+    }
   }
 
   @include modifier(info) {
@@ -121,6 +176,17 @@
       background-color: $info-light;
       border-color: $info-light;
     }
+
+    @include when(plain) {
+      color: $info;
+      background-color: $info-light;
+
+      &:hover, &:focus {
+        color: $white;
+        background-color: $info;
+        border-color: $info;
+      }
+    }
   }
 
   @include modifier(grey) {
@@ -136,6 +202,27 @@
     &:disabled {
       background-color: $grey200;
       border-color: $grey200;
+    }
+
+    @include when(plain) {
+      color: $grey500;
+      background-color: $grey200;
+
+      &:hover, &:focus {
+        color: $white;
+        background-color: $grey500;
+        border-color: $grey500;
+      }
+    }
+  }
+
+  @include modifier(white) {
+    background-color: $white;
+    border: 1px solid $border-color;
+    color: $text-color;
+
+    &:hover, &:focus {
+      color: $primary;
     }
   }
 

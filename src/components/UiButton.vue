@@ -7,6 +7,7 @@
       [`ui-button--${color}`]: true,
       'is-pill': pill,
       'is-loading': loading,
+      'is-plain': plain,
     }"
     :disabled="isDisabled"
     :type="type"
