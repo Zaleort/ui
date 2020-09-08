@@ -5,6 +5,7 @@
     :class="{
       'is-disabled': disabled,
       'is-selected': selected,
+      'is-hovered': hovered,
     }"
     @click="handleSelect"
   >
@@ -12,23 +13,13 @@
   </li>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<script lang="ts">
+import {
+  computed, ComputedRef, defineComponent, inject, onBeforeUnmount, watch,
+} from 'vue';
 
 export default defineComponent({
   name: 'UiOption',
-  inject: {
-    addOption: 'addOption',
-    removeOption: 'removeOption',
-    addOptionCount: 'addOptionCount',
-    substractOptionCount: 'substractOptionCount',
-    addSelectedValue: 'addSelectedValue',
-    removeSelectedValue: 'removeSelectedValue',
-    selectValue: 'value',
-    inputValue: 'inputValue',
-    filterable: 'filterable',
-  },
-
   props: {
     value: {
       type: [Number, String, Object, Array],
@@ -57,64 +48,72 @@ export default defineComponent({
     },
   },
 
-  computed: {
-    selected() {
-      if (Array.isArray(this.selectValue.value)) {
-        return this.selectValue.value.indexOf(this.value) !== -1;
-      }
+  setup(props) {
+    const addOption = inject<Function>('addOption', () => {});
+    const removeOption = inject<Function>('removeOption', () => {});
+    const addOptionCount = inject<Function>('addOptionCount', () => {});
+    const substractOptionCount = inject<Function>('substractOptionCount', () => {});
+    const handleSelectedValue = inject<Function>('handleSelectedValue', () => {});
+    const selectValue = inject<ComputedRef>('value');
+    const selectHovered = inject<ComputedRef>('hovered');
+    const inputValue = inject<ComputedRef>('inputValue');
+    const filterable = inject<boolean>('filterable', false);
 
-      return this.selectValue.value === this.value;
-    },
+    if (typeof selectValue === 'undefined' || typeof inputValue === 'undefined') {
+      console.warn('Options debe estar dentro de un componente Select');
+      return {};
+    }
 
-    visible() {
-      if (this.inputValue.value.length <= 0 || !this.filterable) {
+    const visible = computed(() => {
+      if (inputValue.value.length <= 0 || !filterable) {
         return true;
       }
 
-      return this.label.includes(this.inputValue.value);
-    },
+      return props.label.includes(inputValue.value);
+    });
 
-    option() {
-      return {
-        value: this.value,
-        label: this.label || this.value,
-        key: this.key || this.value,
-        created: this.created,
-      };
-    },
-  },
+    watch(visible, () => (visible.value ? addOptionCount() : substractOptionCount()));
 
-  watch: {
-    visible() {
-      if (this.visible) {
-        this.addOptionCount();
-      } else {
-        this.substractOptionCount();
+    const option = computed(() => ({
+      value: props.value,
+      label: props.label || props.value,
+      key: props.key || props.value,
+      created: props.created,
+      visible,
+    }));
+
+    const hovered = computed(() => option.value.key === selectHovered?.value);
+    const selected = computed(() => {
+      if (Array.isArray(selectValue.value)) {
+        return selectValue.value.indexOf(props.value) !== -1;
       }
-    },
-  },
 
-  created() {
-    this.addOption(this.option);
-  },
+      return selectValue.value === props.value;
+    });
 
-  beforeUnmount() {
-    this.removeOption(this.option);
-  },
-
-  methods: {
-    handleSelect() {
-      if (this.disabled) {
+    const handleSelect = () => {
+      if (props.disabled) {
         return;
       }
 
-      if (this.selected && Array.isArray(this.selectValue.value)) {
-        this.removeSelectedValue(this.option);
-        return;
-      }
+      handleSelectedValue(option.value);
+    };
 
-      this.addSelectedValue(this.option);
-    },
+    addOption(option.value);
+    onBeforeUnmount(() => {
+      removeOption(option.value);
+    });
+
+    return {
+      selectValue,
+      inputValue,
+      selectHovered,
+      filterable,
+      hovered,
+      selected,
+      visible,
+      handleSelect,
+    };
   },
 });
 </script>

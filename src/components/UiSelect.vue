@@ -6,6 +6,7 @@
       [`ui-select--${inputSize}`]: inputSize,
     }"
     @click.stop="toggle"
+    @keydown="handleKey"
   >
     <ui-input
       v-model:value="inputValue"
@@ -54,7 +55,7 @@
 
 <script lang="ts">
 import {
-  defineComponent, computed, ref, reactive, watch, onMounted,
+  defineComponent, computed, ref, reactive, watch, onMounted, provide,
 } from 'vue';
 import useFormInject from '@/composables/formInject';
 
@@ -67,22 +68,6 @@ interface UiSelectOption {
 
 export default defineComponent({
   name: 'UiSelect',
-  // Permite a los UiOption acceder a los props, ya que al ser slots no pueden recibirlos
-  // Pasando funciones por Provide permite actualizar data del Select, al no poder escuchar eventos
-  provide() {
-    return {
-      addOption: this.addOption,
-      removeOption: this.removeOption,
-      addOptionCount: this.addOptionCount,
-      substractOptionCount: this.substractOptionCount,
-      addSelectedValue: this.addSelectedValue,
-      removeSelectedValue: this.removeSelectedValue,
-      value: computed(() => this.value),
-      inputValue: computed(() => this.inputValue),
-      filterable: this.filterable,
-    };
-  },
-
   props: {
     value: {
       type: [Number, String, Object, Array],
@@ -168,6 +153,8 @@ export default defineComponent({
     const currentPlaceholder = ref(props.placeholder);
     const cachedCurrentPlaceholder = ref('');
     const options = reactive<UiSelectOption[]>([]);
+    const optionHovered = ref<string | number | null>(null);
+    const optionHoveredIndex = ref(-1);
     let selected = props.multiple ? reactive<UiSelectOption[]>([]) : reactive<UiSelectOption | any>({});
     const filteredOptionsCount = ref(0);
     const visible = ref(false);
@@ -246,14 +233,21 @@ export default defineComponent({
     const addOptionCount = () => filteredOptionsCount.value += 1;
     const substractOptionCount = () => filteredOptionsCount.value -= 1;
 
+    const resetHovered = () => {
+      optionHovered.value = null;
+      optionHoveredIndex.value = -1;
+    };
+
     const toggle = () => {
       if (!props.disabled) {
         visible.value = !visible.value;
+        resetHovered();
       }
     };
 
     const close = () => {
       visible.value = false;
+      resetHovered();
     };
 
     watch(visible, () => {
@@ -297,6 +291,73 @@ export default defineComponent({
       }
     };
 
+    const handleSelectedValue = (val: UiSelectOption) => {
+      let isSelected = false;
+
+      if (Array.isArray(selected)) {
+        const i = selected.findIndex(o => o.key === val.key);
+        isSelected = i >= 0;
+      } else {
+        isSelected = selected.key === val.key;
+      }
+
+      if (!isSelected) addSelectedValue(val);
+      else removeSelectedValue(val);
+    };
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (!visible.value) toggle();
+
+      switch (e.key) {
+        case 'Down':
+        case 'ArrowDown':
+          if (optionHoveredIndex.value === -1) {
+            optionHoveredIndex.value = 0;
+            optionHovered.value = options[optionHoveredIndex.value].key;
+            return;
+          }
+
+          optionHoveredIndex.value = optionHoveredIndex.value === options.length - 1 ? 0 : optionHoveredIndex.value + 1;
+          optionHovered.value = options[optionHoveredIndex.value].key;
+          break;
+
+        case 'Up':
+        case 'ArrowUp':
+          if (optionHoveredIndex.value === -1) {
+            optionHoveredIndex.value = options.length - 1;
+            optionHovered.value = options[optionHoveredIndex.value].key;
+            return;
+          }
+
+          optionHoveredIndex.value = optionHoveredIndex.value === 0 ? options.length - 1 : optionHoveredIndex.value - 1;
+          optionHovered.value = options[optionHoveredIndex.value].key;
+          break;
+
+        case 'Enter':
+          if (optionHoveredIndex.value < 0) return;
+          handleSelectedValue(options[optionHoveredIndex.value]);
+          break;
+
+        case 'Esc':
+        case 'Escape':
+          close();
+          break;
+        default:
+      }
+    };
+
+    // Permite a los UiOption acceder a los props, ya que al ser slots no pueden recibirlos
+    // Pasando funciones por Provide permite actualizar data del Select, al no poder escuchar eventos
+    provide('addOption', addOption);
+    provide('removeOption', removeOption);
+    provide('addOptionCount', addOptionCount);
+    provide('substractOptionCount', substractOptionCount);
+    provide('handleSelectedValue', handleSelectedValue);
+    provide('value', computed(() => props.value));
+    provide('inputValue', computed(() => inputValue.value));
+    provide('hovered', computed(() => optionHovered.value));
+    provide('filterable', props.filterable);
+
     onMounted(() => {
       filteredOptionsCount.value = options.length;
 
@@ -337,6 +398,8 @@ export default defineComponent({
       cachedCurrentPlaceholder,
       selected,
       options,
+      optionHovered,
+      optionHoveredIndex,
       isDisabled,
       inputSize,
       inputValidateOn,
@@ -358,6 +421,7 @@ export default defineComponent({
       formValidators,
       handleInput,
       handleChange,
+      handleKey,
     };
   },
 });

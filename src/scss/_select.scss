@@ -62,6 +62,12 @@
     @include when(selected) {
       color: $primary;
     }
+
+    @include when(hovered) {
+      transition-timing-function: ease-in;
+      background-color: $primary;
+      color: $white;
+    }
   }
 
   @include element(empty) {
