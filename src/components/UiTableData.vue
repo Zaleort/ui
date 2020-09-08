@@ -24,7 +24,7 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
+  setup() {
     const tableSize = inject('tableSize', 'normal');
 
     return {

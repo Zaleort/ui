@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import formInject from '@/composables/formInject';
+import useFormInject from '@/composables/formInject';
 
 export default defineComponent({
   name: 'UiButton',
@@ -67,7 +67,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { formDisabled, formSize } = formInject();
+    const { formDisabled, formSize } = useFormInject();
     const isDisabled = computed(() => props.loading || props.disabled || formDisabled);
     const buttonSize = computed(() => props.size || formSize || 'normal');
 

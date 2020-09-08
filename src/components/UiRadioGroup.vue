@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, provide } from 'vue';
-import useInjectForm from '@/composables/formInject';
+import useFormInject from '@/composables/formInject';
 
 export default defineComponent({
   name: 'UiRadioGroup',
@@ -36,7 +36,7 @@ export default defineComponent({
     const {
       formSize,
       formDisabled,
-    } = useInjectForm();
+    } = useFormInject();
 
     const groupSize = computed(() => props.size || formSize || 'normal');
     const groupDisabled = computed(() => props.disabled || formDisabled);

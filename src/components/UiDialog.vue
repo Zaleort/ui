@@ -61,7 +61,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, watch } from 'vue';
-import draggable from '@/composables/draggable';
+import useDraggable from '@/composables/draggable';
 
 export default defineComponent({
   name: 'UiDialog',
@@ -109,7 +109,7 @@ export default defineComponent({
       defaultPositions,
       draggableContainer,
       dragMouseDown,
-    } = draggable();
+    } = useDraggable();
 
     const hasFooter = computed(() => !!context.slots.footer);
     const styles = computed(() => {

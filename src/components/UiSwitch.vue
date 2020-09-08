@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from 'vue';
-import formInject from '@/composables/formInject';
+import useFormInject from '@/composables/formInject';
 
 export default defineComponent({
   name: 'UiSwitch',
@@ -80,7 +80,7 @@ export default defineComponent({
       set: (check: boolean) => context.emit('update:checked', check),
     });
 
-    const { formDisabled } = formInject();
+    const { formDisabled } = useFormInject();
     const isDisabled = computed(() => props.disabled || formDisabled);
 
     const hasLabel = computed(() => !!props.label || !!context.slots.default);

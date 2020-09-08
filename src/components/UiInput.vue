@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
-import formInject from '@/composables/formInject';
+import useFormInject from '@/composables/formInject';
 
 export default defineComponent({
   name: 'UiInput',
@@ -112,7 +112,7 @@ export default defineComponent({
       formSize,
       formValidateOn,
       formValidators,
-    } = formInject();
+    } = useFormInject();
 
     const inputValue = computed({
       get: () => props.value,

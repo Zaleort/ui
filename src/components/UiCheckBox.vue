@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
-import formInject from '@/composables/formInject';
+import useFormInject from '@/composables/formInject';
 
 export default defineComponent({
   name: 'UiCheckbox',
@@ -78,7 +78,7 @@ export default defineComponent({
   setup(props, context) {
     const focus = ref(false);
 
-    const { formDisabled } = formInject();
+    const { formDisabled } = useFormInject();
     const isDisabled = computed(() => props.disabled || formDisabled);
 
     const hasLabel = computed(() => {
