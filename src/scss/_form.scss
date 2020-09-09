@@ -6,6 +6,25 @@
   @include modifier(inline) {
     flex-direction: row;
   }
+
+  @include element(errors) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: $danger;
+    color: $white;
+    padding: 12px;
+    margin-bottom: 16px;
+
+    @if ($is-rounded) {
+      border-radius: $radius;
+    }
+  }
+
+  @include element(error) {
+    display: block;
+    margin: 3px;
+  }
 }
 
 @include block(form-item) {

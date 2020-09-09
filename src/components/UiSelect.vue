@@ -10,6 +10,7 @@
   >
     <ui-input
       v-model:value="inputValue"
+      :class="{ 'is-error': error !== null }"
       type="text"
       :disabled="isDisabled"
       :readonly="readonly || !filterable"
@@ -144,6 +145,7 @@ export default defineComponent({
 
   setup(props, context) {
     const inputValue = ref('');
+    const error = ref<string | null>(null);
     const currentPlaceholder = ref(props.placeholder);
     const cachedCurrentPlaceholder = ref('');
     const options = reactive<UiSelectOption[]>([]);
@@ -303,7 +305,7 @@ export default defineComponent({
       }
 
       if (typeof props.validator === 'function' && inputValidateOn.value === 'input') {
-        props.validator();
+        error.value = props.validator();
       }
     };
 
@@ -313,7 +315,7 @@ export default defineComponent({
       }
 
       if (typeof props.validator === 'function' && inputValidateOn.value === 'change') {
-        props.validator();
+        error.value = props.validator();
       }
     };
 
@@ -413,6 +415,7 @@ export default defineComponent({
     return {
       visible,
       inputValue,
+      error,
       currentPlaceholder,
       cachedCurrentPlaceholder,
       selected,

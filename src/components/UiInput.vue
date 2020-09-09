@@ -6,6 +6,7 @@
       'is-focus': focus,
       'is-disabled': isDisabled,
       'is-readonly': readonly,
+      'is-error': error !== null,
     }"
   >
     <div v-if="hasPrepend" class="ui-input__prepend">
@@ -114,6 +115,7 @@ export default defineComponent({
       formValidators,
     } = useFormInject();
 
+    const error = ref<string | null>(null);
     const inputValue = computed({
       get: () => props.value,
       set: val => context.emit('update:value', val),
@@ -123,7 +125,7 @@ export default defineComponent({
       context.emit('input', e);
 
       if (typeof props.validator === 'function' && props.validateOn === 'input') {
-        props.validator();
+        error.value = props.validator();
       }
     };
 
@@ -131,7 +133,7 @@ export default defineComponent({
       context.emit('change', e);
 
       if (typeof props.validator === 'function' && props.validateOn === 'change') {
-        props.validator();
+        error.value = props.validator();
       }
     };
 
@@ -142,7 +144,7 @@ export default defineComponent({
       setFocus(false);
 
       if (typeof props.validator === 'function' && props.validateOn === 'blur') {
-        props.validator();
+        error.value = props.validator();
       }
     };
 
@@ -159,6 +161,7 @@ export default defineComponent({
 
     return {
       inputValue,
+      error,
       focus,
       setFocus,
       handleFocus,

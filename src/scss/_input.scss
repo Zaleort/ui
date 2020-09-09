@@ -31,6 +31,10 @@
     border: 1px solid $border-color;
   }
 
+  @include when(error) {
+    border: 1px solid $danger;
+  }
+
   @include element(inner) {
     flex: 1;
     padding: 7px 9px;

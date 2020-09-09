@@ -91,7 +91,6 @@ export default defineComponent({
     },
   },
 
-  // Sin setup por ahora Vue no detecta el tipo de Gutter (rc-5)
   setup() {
     const gutter = inject('gutter', 'normal');
 
