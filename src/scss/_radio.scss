@@ -103,3 +103,103 @@
   display: inline-block;
   vertical-align: middle;
 }
+
+@include block(radio-button) {
+  display: inline-flex;
+  color: $text-color;
+  cursor: pointer;
+  outline: none;
+  padding: 7px 16px;
+  transition: all 90ms ease-in;
+  border: 1px solid $border-color;
+  border-right: none;
+
+  @if ($is-rounded) {
+    &:first-child {
+      border-radius: $radius 0 0 $radius;
+    }
+  }
+
+  @include modifier(primary) {
+    &:hover, &:focus {
+      color: $primary;
+    }
+  }
+  @include modifier(secondary) {
+    &:hover, &:focus {
+      color: $secondary;
+    }
+  }
+  @include modifier(danger) {
+    &:hover, &:focus {
+      color: $danger;
+    }
+  }
+  @include modifier(warning) {
+    &:hover, &:focus {
+      color: $warning;
+    }
+  }
+  @include modifier(success) {
+    &:hover, &:focus {
+      color: $success;
+    }
+  }
+  @include modifier(info) {
+    &:hover, &:focus {
+      color: $info;
+    }
+  }
+  @include modifier(grey) {
+    &:hover, &:focus {
+      color: $grey500;
+    }
+  }
+
+  &:last-child {
+    border-right: 1px solid $border-color;
+
+    @if ($is-rounded) {
+      border-radius: 0 $radius $radius 0;
+    }
+  }
+
+  @include when(checked) {
+    @include modifier(primary) {
+      color: $white;
+      background-color: $primary;
+    }
+    @include modifier(secondary) {
+      color: $white;
+      background-color: $secondary;
+    }
+    @include modifier(danger) {
+      color: $white;
+      background-color: $danger;
+    }
+    @include modifier(warning) {
+      color: $white;
+      background-color: $warning;
+    }
+    @include modifier(success) {
+      color: $white;
+      background-color: $success;
+    }
+    @include modifier(info) {
+      color: $white;
+      background-color: $info;
+    }
+    @include modifier(grey) {
+      color: $white;
+      background-color: $grey500;
+    }
+  }
+
+  @include element(original) {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    cursor: pointer;
+  }
+}

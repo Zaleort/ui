@@ -24,6 +24,7 @@ import UiMessages from '@/components/UiMessages.vue';
 import UiOption from '@/components/UiOption.vue';
 import UiProgress from '@/components/UiProgress.vue';
 import UiRadio from '@/components/UiRadio.vue';
+import UiRadioButton from '@/components/UiRadioButton.vue';
 import UiRadioGroup from '@/components/UiRadioGroup.vue';
 import UiRow from '@/components/UiRow.vue';
 import UiSelect from '@/components/UiSelect.vue';
@@ -68,6 +69,7 @@ const components = [
   UiOption,
   UiProgress,
   UiRadio,
+  UiRadioButton,
   UiRadioGroup,
   UiRow,
   UiSelect,
