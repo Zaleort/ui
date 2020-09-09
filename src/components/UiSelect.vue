@@ -57,14 +57,8 @@
 import {
   defineComponent, computed, ref, reactive, watch, onMounted, provide,
 } from 'vue';
+import { UiSelectOption } from '@/interfaces/Select';
 import useFormInject from '@/composables/formInject';
-
-interface UiSelectOption {
-  value: any;
-  key: number | string;
-  label: string;
-  created: boolean;
-}
 
 export default defineComponent({
   name: 'UiSelect',
@@ -238,6 +232,36 @@ export default defineComponent({
       optionHoveredIndex.value = -1;
     };
 
+    const getNextVisibleOptionIndex = () => {
+      let i = optionHoveredIndex.value + 1;
+      if (i >= options.length) {
+        i = 0;
+      }
+
+      for (i; i < options.length; i++) {
+        if (options[i].visible) {
+          return i;
+        }
+      }
+
+      return optionHoveredIndex.value;
+    };
+
+    const getPreviousVisibleOptionIndex = () => {
+      let i = optionHoveredIndex.value - 1;
+      if (i <= -1) {
+        i = options.length - 1;
+      }
+
+      for (i; i >= 0; i--) {
+        if (options[i].visible) {
+          return i;
+        }
+      }
+
+      return optionHoveredIndex.value;
+    };
+
     const toggle = () => {
       if (!props.disabled) {
         visible.value = !visible.value;
@@ -272,6 +296,8 @@ export default defineComponent({
     });
 
     const handleInput = () => {
+      resetHovered();
+
       if (props.remote && typeof props.remoteMethod === 'function') {
         props.remoteMethod(inputValue.value);
       }
@@ -311,26 +337,19 @@ export default defineComponent({
       switch (e.key) {
         case 'Down':
         case 'ArrowDown':
-          if (optionHoveredIndex.value === -1) {
-            optionHoveredIndex.value = 0;
-            optionHovered.value = options[optionHoveredIndex.value].key;
-            return;
-          }
+          optionHoveredIndex.value = getNextVisibleOptionIndex();
 
-          optionHoveredIndex.value = optionHoveredIndex.value === options.length - 1 ? 0 : optionHoveredIndex.value + 1;
-          optionHovered.value = options[optionHoveredIndex.value].key;
+          if (optionHoveredIndex.value !== -1) {
+            optionHovered.value = options[optionHoveredIndex.value].key;
+          }
           break;
 
         case 'Up':
         case 'ArrowUp':
-          if (optionHoveredIndex.value === -1) {
-            optionHoveredIndex.value = options.length - 1;
+          optionHoveredIndex.value = getPreviousVisibleOptionIndex();
+          if (optionHoveredIndex.value !== -1) {
             optionHovered.value = options[optionHoveredIndex.value].key;
-            return;
           }
-
-          optionHoveredIndex.value = optionHoveredIndex.value === 0 ? options.length - 1 : optionHoveredIndex.value - 1;
-          optionHovered.value = options[optionHoveredIndex.value].key;
           break;
 
         case 'Enter':
@@ -422,6 +441,8 @@ export default defineComponent({
       handleInput,
       handleChange,
       handleKey,
+      getNextVisibleOptionIndex,
+      getPreviousVisibleOptionIndex,
     };
   },
 });
