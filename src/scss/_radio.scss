@@ -168,30 +168,43 @@
     @include modifier(primary) {
       color: $white;
       background-color: $primary;
+      border-color: $primary;
     }
+
     @include modifier(secondary) {
       color: $white;
       background-color: $secondary;
+      border-color: $secondary;
     }
+
     @include modifier(danger) {
       color: $white;
       background-color: $danger;
+      border-color: $danger;
     }
+
     @include modifier(warning) {
       color: $white;
       background-color: $warning;
+      border-color: $warning;
     }
+
     @include modifier(success) {
       color: $white;
       background-color: $success;
+      border-color: $success;
     }
+
     @include modifier(info) {
       color: $white;
       background-color: $info;
+      border-color: $info;
     }
+
     @include modifier(grey) {
       color: $white;
       background-color: $grey500;
+      border-color: $grey500;
     }
   }
 
