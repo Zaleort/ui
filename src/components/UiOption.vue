@@ -69,7 +69,7 @@ export default defineComponent({
         return true;
       }
 
-      return props.label.includes(inputValue.value);
+      return props.label.toLocaleLowerCase().includes(inputValue.value.toLocaleLowerCase());
     });
 
     watch(visible, () => (visible.value ? addOptionCount() : substractOptionCount()));
