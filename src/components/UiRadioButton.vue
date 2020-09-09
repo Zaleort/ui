@@ -36,9 +36,8 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent, ref, inject, computed, ComputedRef,
-} from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+import useGroupInject from '@/composables/groupInject';
 import useFormInject from '@/composables/formInject';
 
 export default defineComponent({
@@ -80,15 +79,18 @@ export default defineComponent({
   setup(props, context) {
     const radio = ref<HTMLInputElement | null>(null);
     const focus = ref(false);
-    const groupValue = inject<ComputedRef | null>('groupValue', null);
-    const groupUpdateValue = inject<Function | null>('groupUpdateValue', null);
-    const groupHandleChange = inject<Function | null>('groupHandleChange', null);
-    const groupSize = inject<ComputedRef | null>('groupSize', null);
-    const groupDisabled = inject<ComputedRef | null>('groupDisabled', null);
-    const groupColor = inject<string | null>('groupColor', null);
-    const isGroup = typeof groupUpdateValue === 'function' && typeof groupHandleChange === 'function';
 
-    if (!isGroup) {
+    const {
+      groupValue,
+      groupUpdateValue,
+      groupHandleChange,
+      groupSize,
+      groupDisabled,
+      groupColor,
+      isRadioGroup,
+    } = useGroupInject();
+
+    if (!isRadioGroup) {
       console.warn('RadioButton debe usarse en un RadioGroup');
     }
 
@@ -113,11 +115,11 @@ export default defineComponent({
     const radioSize = computed(() => props.size || groupSize?.value || formSize || 'normal');
     const radioColor = computed(() => props.color || groupColor || 'primary');
     const isDisabled = computed(() => props.disabled || groupDisabled?.value || formDisabled);
-    const tabIndex = computed(() => ((isDisabled.value || (isGroup && model.value !== props.label)) ? -1 : 0));
+    const tabIndex = computed(() => ((isDisabled.value || (isRadioGroup && model.value !== props.label)) ? -1 : 0));
 
     const handleChange = () => {
       context.emit('change', model.value);
-      if (isGroup) {
+      if (isRadioGroup) {
         groupHandleChange!(model.value);
       }
     };
@@ -131,7 +133,7 @@ export default defineComponent({
       groupHandleChange,
       groupSize,
       groupColor,
-      isGroup,
+      isRadioGroup,
       model,
       radioSize,
       radioColor,

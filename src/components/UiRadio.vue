@@ -44,9 +44,8 @@
   </label>
 </template>
 <script lang="ts">
-import {
-  defineComponent, ref, inject, computed, ComputedRef,
-} from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+import useGroupInject from '@/composables/groupInject';
 import useFormInject from '@/composables/formInject';
 
 export default defineComponent({
@@ -88,12 +87,15 @@ export default defineComponent({
   setup(props, context) {
     const radio = ref<HTMLInputElement | null>(null);
     const focus = ref(false);
-    const groupValue = inject<ComputedRef | null>('groupValue', null);
-    const groupUpdateValue = inject<Function | null>('groupUpdateValue', null);
-    const groupHandleChange = inject<Function | null>('groupHandleChange', null);
-    const groupSize = inject<ComputedRef | null>('groupSize', null);
-    const groupDisabled = inject<ComputedRef | null>('groupDisabled', null);
-    const isGroup = typeof groupUpdateValue === 'function' && typeof groupHandleChange === 'function';
+
+    const {
+      groupValue,
+      groupUpdateValue,
+      groupHandleChange,
+      groupSize,
+      groupDisabled,
+      isRadioGroup,
+    } = useGroupInject();
 
     const {
       formDisabled,
@@ -101,9 +103,9 @@ export default defineComponent({
     } = useFormInject();
 
     const model = computed({
-      get: () => (isGroup ? groupValue?.value : props.value),
+      get: () => (isRadioGroup ? groupValue?.value : props.value),
       set: (val) => {
-        if (isGroup) {
+        if (isRadioGroup) {
           groupUpdateValue!(val);
         } else {
           context.emit('update:value', val);
@@ -117,11 +119,11 @@ export default defineComponent({
 
     const radioSize = computed(() => props.size || groupSize?.value || formSize);
     const isDisabled = computed(() => props.disabled || groupDisabled?.value || formDisabled);
-    const tabIndex = computed(() => ((isDisabled.value || (isGroup && model.value !== props.label)) ? -1 : 0));
+    const tabIndex = computed(() => ((isDisabled.value || (isRadioGroup && model.value !== props.label)) ? -1 : 0));
 
     const handleChange = () => {
       context.emit('change', model.value);
-      if (isGroup) {
+      if (isRadioGroup) {
         groupHandleChange!(model.value);
       }
     };
@@ -134,7 +136,7 @@ export default defineComponent({
       groupDisabled,
       groupHandleChange,
       groupSize,
-      isGroup,
+      isRadioGroup,
       model,
       radioSize,
       isDisabled,
