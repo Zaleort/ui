@@ -1,0 +1,33 @@
+@include block(avatar) {
+  display: inline-block;
+  border: 1px solid $border-color;
+  overflow: hidden;
+
+  @if ($is-rounded) {
+    border-radius: $radius;
+  }
+
+  @include modifier(circle) {
+    border-radius: 100%;
+  }
+
+  @include modifier(large) {
+    width: 75px;
+    height: 75px;
+  }
+
+  @include modifier(normal) {
+    width: 50px;
+    height: 50px;
+  }
+
+  @include modifier(small) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @include modifier(mini) {
+    width: 21px;
+    height: 21px;
+  }
+}
