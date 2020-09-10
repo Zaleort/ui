@@ -146,7 +146,7 @@ export default defineComponent({
   setup(props, context) {
     const inputValue = ref('');
     const error = ref<string | null>(null);
-    const currentPlaceholder = ref(props.placeholder);
+    const currentPlaceholder = ref(props.multiple ? '' : props.placeholder);
     const cachedCurrentPlaceholder = ref('');
     const options = reactive<UiSelectOption[]>([]);
     const optionHovered = ref<string | number | null>(null);
@@ -277,7 +277,7 @@ export default defineComponent({
     };
 
     watch(visible, () => {
-      if (!props.filterable) {
+      if (!props.filterable || props.multiple) {
         return;
       }
 
@@ -285,15 +285,9 @@ export default defineComponent({
         cachedCurrentPlaceholder.value = inputValue.value;
         currentPlaceholder.value = inputValue.value;
         inputValue.value = '';
-        return;
-      }
-
-      if (!Array.isArray(selected)) {
+      } else {
         currentPlaceholder.value = props.placeholder;
         inputValue.value = selected.label;
-      } else {
-        currentPlaceholder.value = '';
-        inputValue.value = '';
       }
     });
 
@@ -357,6 +351,11 @@ export default defineComponent({
         case 'Enter':
           if (optionHoveredIndex.value < 0) return;
           handleSelectedValue(options[optionHoveredIndex.value]);
+
+          if (!props.multiple) {
+            close();
+          }
+
           break;
 
         case 'Esc':
