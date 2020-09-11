@@ -7,6 +7,7 @@ import UiCard from '@/components/UiCard.vue';
 import UiCheckBox from '@/components/UiCheckBox.vue';
 import UiContainer from '@/components/UiContainer.vue';
 import UiCol from '@/components/UiCol.vue';
+import UiCopy from '@/components/UiCopy.vue';
 import UiDialog from '@/components/UiDialog.vue';
 import UiDropdown from '@/components/UiDropdown.vue';
 import UiDropdownItem from '@/components/UiDropdownItem.vue';
@@ -52,6 +53,7 @@ const components = [
   UiCheckBox,
   UiContainer,
   UiCol,
+  UiCopy,
   UiDialog,
   UiDropdown,
   UiDropdownItem,
