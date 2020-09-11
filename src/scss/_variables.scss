@@ -173,7 +173,7 @@ $grey900: #212121;
 $black: #000000;
 
 // Primary
-$primary: $blue500 !default;
+$primary: $teal500 !default;
 $primary50: tint($primary, 90%) !default;
 $primary100: tint($primary, 70%) !default;
 $primary200: tint($primary, 50%) !default;
@@ -229,11 +229,11 @@ $font-size: 16px !default;
 $font-family: sans-serif !default;
 
 // Border radius
-$is-rounded: true !default;
+$is-rounded: false !default;
 $radius: 3px !default;
 
 // Shadows
-$is-shadowed: true !default;
+$is-shadowed: false !default;
 $low-shadow: 
   0 3px 4px 0 rgba(0, 0, 0, 0.15),
   0 6px 12px 0 rgba(0, 0, 0, 0.10) !default;
@@ -246,6 +246,7 @@ $high-shadow:
 
 $topbar-height: 50px !default;
 $menu-hamburger-width: 250px;
+$menu-hamburger-collapsed: 42px;
 
 // Breakpoints
 $mobile: 300px;
