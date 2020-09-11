@@ -16,8 +16,8 @@
       :readonly="readonly || !filterable"
       :size="inputSize"
       :placeholder="currentPlaceholder"
-      @input="remote ? debouncedHandleInput() : handleInput "
-      @change="remote ? debouncedHandleChange() : handleChange"
+      @input="remote ? debouncedHandleInput() : handleInput()"
+      @change="remote ? debouncedHandleChange() : handleChange()"
     >
       <template v-if="hasPrepend" #prepend>
         <slot name="prepend" />
@@ -39,6 +39,8 @@
       <ul v-show="visible" class="ui-select-menu">
         <ui-option
           v-if="showCreatedOption"
+          :key="Date.now()"
+          :value="inputValue"
           :label="inputValue"
           created
         />
@@ -193,7 +195,13 @@ export default defineComponent({
       return props.filterable && props.allowCreate && inputValue.value !== '' && !hasExistingOption;
     });
 
-    const addOption = (option: UiSelectOption) => options.push(option);
+    const addOption = (option: UiSelectOption) => {
+      if (options.some(o => o.key === option.key)) return;
+
+      if (option.created) options.unshift(option);
+      else options.push(option);
+    };
+
     const removeOption = (option: UiSelectOption) => {
       const i = options.findIndex(o => o.key === option.key);
 
@@ -242,6 +250,13 @@ export default defineComponent({
       }
 
       for (i; i < options.length; i++) {
+        if (options[i].visible) {
+          return i;
+        }
+      }
+
+      i = 0;
+      for (i; i < optionHoveredIndex.value; i++) {
         if (options[i].visible) {
           return i;
         }
@@ -305,6 +320,8 @@ export default defineComponent({
     };
 
     const handleChange = () => {
+      resetHovered();
+
       if (props.remote && typeof props.remoteMethod === 'function') {
         props.remoteMethod(inputValue.value);
       }

@@ -118,6 +118,7 @@ export default defineComponent({
       selected,
       visible,
       handleSelect,
+      option,
     };
   },
 });
