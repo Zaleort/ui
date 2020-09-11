@@ -16,8 +16,8 @@
       :readonly="readonly || !filterable"
       :size="inputSize"
       :placeholder="currentPlaceholder"
-      @input="handleInput"
-      @change="handleChange"
+      @input="remote ? debouncedHandleInput() : handleInput "
+      @change="remote ? debouncedHandleChange() : handleChange"
     >
       <template v-if="hasPrepend" #prepend>
         <slot name="prepend" />
@@ -60,6 +60,7 @@ import {
 } from 'vue';
 import { UiSelectOption } from '@/interfaces/Select';
 import useFormInject from '@/composables/formInject';
+import debounce from '@/lib/debounce';
 
 export default defineComponent({
   name: 'UiSelect',
@@ -292,6 +293,7 @@ export default defineComponent({
     });
 
     const handleInput = () => {
+      console.log('Amole');
       resetHovered();
 
       if (props.remote && typeof props.remoteMethod === 'function') {
@@ -312,6 +314,9 @@ export default defineComponent({
         error.value = props.validator();
       }
     };
+
+    const debouncedHandleInput = debounce(300, () => handleInput());
+    const debouncedHandleChange = debounce(300, () => handleChange());
 
     const handleSelectedValue = (val: UiSelectOption) => {
       let isSelected = false;
@@ -442,6 +447,8 @@ export default defineComponent({
       formValidators,
       handleInput,
       handleChange,
+      debouncedHandleInput,
+      debouncedHandleChange,
       handleKey,
       getNextVisibleOptionIndex,
       getPreviousVisibleOptionIndex,
