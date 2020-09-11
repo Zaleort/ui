@@ -37,6 +37,17 @@
 
     <transition name="ui-select-show">
       <ul v-show="visible" class="ui-select-menu">
+        <template v-if="emptyText && (!allowCreate || loading || (allowCreate && options.length === 0 ))">
+          <slot v-if="$slots.empty" name="empty" />
+          <p v-else class="ui-select-menu__empty">
+            <ui-icon
+              v-if="loading"
+              icon="loading"
+              class="mr-2 ui-icon-loading"
+            />
+            {{ emptyText }}
+          </p>
+        </template>
         <ui-option
           v-if="showCreatedOption"
           :key="Date.now()"
@@ -45,12 +56,6 @@
           created
         />
         <slot />
-        <template v-if="emptyText && (!allowCreate || loading || (allowCreate && options.length === 0 ))">
-          <slot v-if="$slots.empty" name="empty" />
-          <p v-else class="ui-select-menu__empty">
-            {{ emptyText }}
-          </p>
-        </template>
       </ul>
     </transition>
   </div>

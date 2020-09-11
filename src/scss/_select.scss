@@ -71,6 +71,8 @@
   }
 
   @include element(empty) {
+    display: flex;
+    align-items: center;
     margin: 0;
     padding: 7px 16px;
     color: $text-secondary-color;

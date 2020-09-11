@@ -2,18 +2,18 @@ const debounde = (delay: number, callback: Function) => {
   let timeoutID: any;
   let cancelled = false;
 
-  function clearExistingTimeout() {
+  const clearExistingTimeout = () => {
     if (timeoutID) {
       clearTimeout(timeoutID);
     }
-  }
+  };
 
-  function cancel() {
+  const cancel = () => {
     clearExistingTimeout();
     cancelled = true;
-  }
+  };
 
-  function wrapper(...arguments_: any[]) {
+  const wrapper = (...arguments_: any[]) => {
     if (cancelled) {
       return;
     }
@@ -24,7 +24,7 @@ const debounde = (delay: number, callback: Function) => {
 
     clearExistingTimeout();
     timeoutID = setTimeout(exec, delay);
-  }
+  };
 
   wrapper.cancel = cancel;
   return wrapper;
