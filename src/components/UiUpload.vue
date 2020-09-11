@@ -214,7 +214,6 @@ export default defineComponent({
       };
 
       uploadFileList.value.push(file);
-      console.log('Pushed');
       props.onChange(file, uploadFileList.value);
     };
 
@@ -238,7 +237,6 @@ export default defineComponent({
     };
 
     const handleError = (err: any, rawFile: any) => {
-      console.log('error');
       const file = getFile(rawFile);
       const fileList = uploadFileList.value;
       file.status = 'fail';

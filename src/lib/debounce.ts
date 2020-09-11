@@ -1,5 +1,4 @@
 const debounde = (delay: number, callback: Function) => {
-  console.log('debounce');
   let timeoutID: any;
   let cancelled = false;
 
@@ -15,7 +14,6 @@ const debounde = (delay: number, callback: Function) => {
   }
 
   function wrapper(...arguments_: any[]) {
-    console.log('Qué pasa');
     if (cancelled) {
       return;
     }

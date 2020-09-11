@@ -293,7 +293,6 @@ export default defineComponent({
     });
 
     const handleInput = () => {
-      console.log('Amole');
       resetHovered();
 
       if (props.remote && typeof props.remoteMethod === 'function') {

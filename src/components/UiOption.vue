@@ -72,8 +72,6 @@ export default defineComponent({
       return props.label.toLocaleLowerCase().includes(inputValue.value.toLocaleLowerCase());
     });
 
-    watch(visible, () => (visible.value ? addOptionCount() : substractOptionCount()));
-
     const option = computed(() => ({
       value: props.value,
       label: props.label || props.value,
@@ -81,6 +79,13 @@ export default defineComponent({
       created: props.created,
       visible,
     }));
+
+    watch(visible, (n, o) => {
+      if (n === o) return;
+
+      if (n) addOptionCount();
+      else substractOptionCount();
+    });
 
     const hovered = computed(() => option.value.key === selectHovered?.value);
     const selected = computed(() => {
