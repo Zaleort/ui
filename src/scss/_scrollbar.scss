@@ -5,7 +5,6 @@
  
 ::-webkit-scrollbar-thumb {
   background-color: $grey500;
-  outline: 10px solid $grey600;
 
   @if ($is-rounded) {
     border-radius: 50px;

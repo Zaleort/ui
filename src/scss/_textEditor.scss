@@ -1,0 +1,50 @@
+@include block (text-editor) {
+  background-color: $white;
+  border: 1px solid $border-color;
+
+  @if($is-rounded) {
+    border-radius: $radius;
+  }
+
+  @include element(options) {
+    border-bottom: 1px solid $border-color;
+  }
+
+  @include element(option) {
+    padding: 3px 12px;
+    transition: all 90ms ease-in;
+    background-color: $white;
+    border: none;
+
+    @if $is-rounded {
+      border-radius: $radius;
+    }
+
+    &:hover {
+      cursor: pointer;
+      transition-timing-function: ease-out;
+      background-color: $grey200;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    @include when(active) {
+      background-color: $grey200;
+    }
+  }
+
+  @include element(input) {
+    padding: 12px;
+    overflow: auto;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

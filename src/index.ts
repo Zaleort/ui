@@ -37,6 +37,7 @@ import UiTableRow from '@/components/UiTableRow.vue';
 import UiTabs from '@/components/UiTabs.vue';
 import UiTabsPanel from '@/components/UiTabsPanel.vue';
 import UiTag from '@/components/UiTag.vue';
+import UiTextEditor from '@/components/UiTextEditor.vue';
 import UiTopbar from '@/components/UiTopbar.vue';
 import UiTooltip from '@/components/UiTooltip.vue';
 import UiUpload from '@/components/UiUpload.vue';
@@ -84,6 +85,7 @@ const components = [
   UiTabs,
   UiTabsPanel,
   UiTag,
+  UiTextEditor,
   UiTopbar,
   UiTooltip,
   UiUpload,
