@@ -16,6 +16,7 @@
       :readonly="readonly || !filterable"
       :size="inputSize"
       :placeholder="currentPlaceholder"
+      :color="color"
       @input="remote ? debouncedHandleInput() : handleInput()"
       @change="remote ? debouncedHandleChange() : handleChange()"
     >
@@ -146,6 +147,11 @@ export default defineComponent({
     validateOn: {
       type: String,
       default: 'submit',
+    },
+
+    color: {
+      type: String,
+      default: null,
     },
   },
 

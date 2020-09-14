@@ -2,6 +2,7 @@
   <div
     :class="{
       'ui-input': type !== 'textarea',
+      [`ui-input--${color}`]: color,
       'ui-textarea': type === 'textarea',
       'is-focus': focus,
       'is-disabled': isDisabled,
@@ -63,6 +64,11 @@ import useFormInject from '@/composables/formInject';
 export default defineComponent({
   name: 'UiInput',
   props: {
+    color: {
+      type: String,
+      default: null,
+    },
+
     value: {
       type: String,
       default: '',
