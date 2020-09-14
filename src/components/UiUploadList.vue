@@ -23,15 +23,20 @@
     >
       <slot :file="file">
         <span class="ui-upload-list__item-name">
-          <ui-icon icon="file" />{{ file.name }}
-          <label class="ml-2 ui-upload-list__item-status-label">
-            <ui-icon icon="check" color="success" />
-          </label>
+          <ui-icon icon="file" />
+          {{ file.name }}
           <ui-icon
             v-if="!disabled"
             icon="close"
             class="ml-2 clickable"
+            description="Eliminar archivo de la lista"
             @click="$emit('remove', file)"
+          />
+          <ui-icon
+            icon="check"
+            color="success"
+            description="Subida completada"
+            class="ui-upload-list__item-status-label"
           />
         </span>
 

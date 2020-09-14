@@ -240,7 +240,7 @@ export default defineComponent({
       const file = getFile(rawFile);
       const fileList = uploadFileList.value;
       file.status = 'fail';
-      // fileList.splice(fileList.indexOf(file), 1);
+      fileList.splice(fileList.indexOf(file), 1);
       props.onError(err, file, uploadFileList.value);
       props.onChange(file, uploadFileList.value);
     };
