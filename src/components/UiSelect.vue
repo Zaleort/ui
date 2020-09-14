@@ -27,6 +27,7 @@
             v-for="item in selected"
             :key="item.key"
             :closable="!isDisabled"
+            :color="tagColor"
             size="small"
             @close="removeSelectedValue(item)"
           >
@@ -152,6 +153,11 @@ export default defineComponent({
     color: {
       type: String,
       default: null,
+    },
+
+    tagColor: {
+      type: String,
+      default: 'primary',
     },
   },
 
