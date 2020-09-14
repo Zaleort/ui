@@ -2,7 +2,7 @@
   <div class="ui-text-editor">
     <div class="ui-text-editor__options">
       <button
-        v-for="(option, i) in options"
+        v-for="(option, i) in editorOptions"
         :key="i"
         :title="option.title"
         :class="{
@@ -33,13 +33,23 @@
 
 <script lang="ts">
 import {
-  defineComponent, reactive, ref,
+  computed,
+  defineComponent,
+  PropType,
+  reactive,
+  ref,
 } from 'vue';
 import { exec, queryCommandState, queryCommandValue } from '@/lib/textEditor';
+import { UiTextEditorOption, UiTextEditorOptions } from '@/interfaces/TextEditor';
 
 export default defineComponent({
   name: 'UiTextEditor',
   props: {
+    options: {
+      type: Object as PropType<UiTextEditorOptions>,
+      default: null,
+    },
+
     minHeight: {
       type: String,
       default: '150px',
@@ -59,7 +69,7 @@ export default defineComponent({
   emits: ['change'],
   setup(props, context) {
     const editor = ref<HTMLElement | null>(null);
-    const checkActive = (option: any) => {
+    const checkActive = (option: UiTextEditorOption) => {
       console.log(option);
       if (!option.state) return;
 
@@ -67,7 +77,7 @@ export default defineComponent({
       option.isActive = option.state();
     };
 
-    const options = reactive({
+    const defaultOptions = {
       bold: {
         icon: '<b>N</b>',
         title: 'Negrita',
@@ -123,6 +133,14 @@ export default defineComponent({
         title: 'Lista',
         result: () => exec('insertUnorderedList'),
       },
+    };
+
+    const editorOptions = computed(() => {
+      if (props.options) {
+        return reactive<UiTextEditorOptions>({ ...props.options });
+      }
+
+      return reactive<UiTextEditorOptions>({ ...defaultOptions });
     });
 
     const handleInput = (e: any) => {
@@ -145,13 +163,12 @@ export default defineComponent({
       }
     };
 
-    const handleOptionClick = (option: any) => {
-      option.result();
-
+    const handleOptionClick = (option: UiTextEditorOption) => {
       if (editor.value) {
         editor.value.focus();
       }
 
+      option.result();
       checkActive(option);
     };
 
@@ -163,7 +180,8 @@ export default defineComponent({
 
     return {
       editor,
-      options,
+      defaultOptions,
+      editorOptions,
       handleInput,
       handleKeyDown,
       handleOptionClick,
