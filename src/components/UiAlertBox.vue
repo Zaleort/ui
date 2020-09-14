@@ -22,7 +22,7 @@
               size="xlarge"
               :icon="type"
             />
-            {{ message }}
+            <slot>{{ message }}</slot>
           </div>
           <footer class="ui-alert-box__footer">
             <ui-button
