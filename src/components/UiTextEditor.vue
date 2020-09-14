@@ -114,13 +114,13 @@ export default defineComponent({
 
       olist: {
         icon: '&#35;',
-        title: 'Ordered List',
+        title: 'Lista ordenada',
         result: () => exec('insertOrderedList'),
       },
 
       ulist: {
         icon: '&#8226;',
-        title: 'Unordered List',
+        title: 'Lista',
         result: () => exec('insertUnorderedList'),
       },
     });
