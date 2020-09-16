@@ -65,6 +65,9 @@ export default defineComponent({
     }
 
     const visible = computed(() => {
+      // Por alguna razón inputValue.value se vuelve undefined al eliminar una opción con removeSelectedOption
+      // cuando multiple es false
+      if (typeof inputValue.value === 'undefined') return false;
       if (inputValue.value.length <= 0 || !filterable) {
         return true;
       }
