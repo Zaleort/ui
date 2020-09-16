@@ -27,6 +27,8 @@
 
       @input="handleInput"
       @keydown="handleKeyDown"
+      @keyup="checkStates"
+      @mouseup="checkStates"
     />
   </div>
 </template>
@@ -69,14 +71,6 @@ export default defineComponent({
   emits: ['change'],
   setup(props, context) {
     const editor = ref<HTMLElement | null>(null);
-    const checkActive = (option: UiTextEditorOption) => {
-      console.log(option);
-      if (!option.state) return;
-
-      console.log(option.state());
-      option.isActive = option.state();
-    };
-
     const defaultOptions = {
       bold: {
         icon: '<b>N</b>',
@@ -143,13 +137,24 @@ export default defineComponent({
       return reactive<UiTextEditorOptions>({ ...defaultOptions });
     });
 
+    const checkOptionState = (option: UiTextEditorOption) => {
+      if (!option.state) return;
+      option.isActive = option.state();
+    };
+
+    const checkStates = () => {
+      Object.values(editorOptions.value).forEach(o => {
+        if (o.state) {
+          o.isActive = o.state();
+        }
+      });
+    };
+
     const handleInput = (e: any) => {
       if (!editor.value) return;
 
       const { firstChild } = e.target;
-      console.log(firstChild);
-
-      if (firstChild && firstChild.nodeType === 3) exec('formatBlock', '<defaultParagraphSeparator>');
+      if (firstChild && firstChild.nodeType === Node.TEXT_NODE) exec('formatBlock', '<div>');
       else if (editor.value.innerHTML === '<br>') editor.value.innerHTML = '';
 
       context.emit('change', editor.value.innerHTML);
@@ -159,7 +164,7 @@ export default defineComponent({
       if (!editor.value) return;
 
       if (e.key === 'Enter' && queryCommandValue('formatBlock') === 'blockquote') {
-        setTimeout(() => exec('formatBlock', '<defaultParagraphSeparator>'), 0);
+        setTimeout(() => exec('formatBlock', '<div>'), 0);
       }
     };
 
@@ -169,7 +174,7 @@ export default defineComponent({
       }
 
       option.result();
-      checkActive(option);
+      checkOptionState(option);
     };
 
     const getInnerHtml = () => {
@@ -185,7 +190,8 @@ export default defineComponent({
       handleInput,
       handleKeyDown,
       handleOptionClick,
-      checkActive,
+      checkOptionState,
+      checkStates,
       getInnerHtml,
     };
   },
