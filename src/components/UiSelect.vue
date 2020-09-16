@@ -35,6 +35,17 @@
           </ui-tag>
         </div>
       </template>
+
+      <template #append>
+        <slot name="append" />
+        <ui-icon
+          v-if="clearable"
+          v-show="value !== null"
+          icon="timesCircle"
+          class="clickable"
+          @click.stop="clearSelectedValues()"
+        />
+      </template>
     </ui-input>
 
     <transition name="ui-select-show">
@@ -244,6 +255,18 @@ export default defineComponent({
         const i = selected.findIndex((v: any) => v.key === val.key);
         selected.splice(i, 1);
         context.emit('update:value', selected.map(s => s.value));
+      } else {
+        selected = {} as UiSelectOption;
+        context.emit('update:value', null);
+      }
+
+      inputValue.value = '';
+    };
+
+    const clearSelectedValues = () => {
+      if (props.multiple && Array.isArray(selected)) {
+        selected.splice(0, selected.length);
+        context.emit('update:value', []);
       } else {
         selected = {} as UiSelectOption;
         context.emit('update:value', null);
@@ -471,6 +494,7 @@ export default defineComponent({
       substractOptionCount,
       addSelectedValue,
       removeSelectedValue,
+      clearSelectedValues,
       toggle,
       close,
       showCreatedOption,

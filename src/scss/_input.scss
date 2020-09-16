@@ -149,10 +149,14 @@
   }
 
   @include element(prepend) {
+    display: flex;
+    align-items: center;
     padding-left: 9px;
   }
 
   @include element(append) {
+    display: flex;
+    align-items: center;
     padding-right: 9px;
   }
 }
