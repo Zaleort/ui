@@ -22,7 +22,11 @@
         <slot>{{ message }}</slot>
       </div>
     </div>
-    <div v-if="closable || !duration" @click="close">
+    <div
+      v-if="closable || !duration"
+      class="display-flex"
+      @click="close"
+    >
       <ui-icon icon="close" class="clickable" />
     </div>
   </div>
