@@ -48,11 +48,11 @@
             <main class="ui-dialog__main">
               <slot />
             </main>
-
-            <footer class="ui-dialog__footer">
-              <slot name="footer" />
-            </footer>
           </div>
+
+          <footer class="ui-dialog__footer">
+            <slot name="footer" />
+          </footer>
         </div>
       </div>
     </transition>
