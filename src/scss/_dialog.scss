@@ -97,15 +97,9 @@
     background-color: $primary;
   }
 
-  @include element(body) {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: auto;
-  }
-
   @include element(main) {
     flex-grow: 1;
+    overflow: auto;
     padding: 12px;
   }
 

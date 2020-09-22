@@ -44,11 +44,9 @@
             </div>
           </header>
 
-          <div class="ui-dialog__body">
-            <main class="ui-dialog__main">
-              <slot />
-            </main>
-          </div>
+          <main class="ui-dialog__main">
+            <slot />
+          </main>
 
           <footer class="ui-dialog__footer">
             <slot name="footer" />
