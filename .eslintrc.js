@@ -34,6 +34,7 @@ module.exports = {
     "arrow-parens": "off",
     "no-restricted-globals": "off",
     "no-plusplus": "off",
+    "no-nested-ternary": "off",
   },
   overrides: [
     {
