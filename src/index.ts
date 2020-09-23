@@ -9,6 +9,11 @@ import UiCheckBox from '@/components/UiCheckBox.vue';
 import UiContainer from '@/components/UiContainer.vue';
 import UiCol from '@/components/UiCol.vue';
 import UiCopy from '@/components/UiCopy.vue';
+import UiDate from '@/components/UiDate.vue';
+import UiDateInput from '@/components/UiDateInput.vue';
+import UiDateDay from '@/components/UiDateDay.vue';
+import UiDateMonth from '@/components/UiDateMonth.vue';
+import UiDateYear from '@/components/UiDateYear.vue';
 import UiDialog from '@/components/UiDialog.vue';
 import UiDropdown from '@/components/UiDropdown.vue';
 import UiDropdownItem from '@/components/UiDropdownItem.vue';
@@ -57,6 +62,11 @@ const components = [
   UiContainer,
   UiCol,
   UiCopy,
+  UiDate,
+  UiDateInput,
+  UiDateDay,
+  UiDateMonth,
+  UiDateYear,
   UiDialog,
   UiDropdown,
   UiDropdownItem,
