@@ -1,0 +1,75 @@
+@include block(date) {
+  position: relative;
+
+  @include element(calendar) {
+    position: absolute;
+    min-width: 300px;
+    z-index: 10;
+    padding: 7px;
+    border: 1px solid $border-color;
+    background-color: $white;
+
+    @if ($is-rounded) {
+      border-radius: $radius;
+    }
+
+    @if ($is-shadowed) {
+      box-shadow: $low-shadow;
+    }
+  }
+
+  @include element(header) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px;
+  }
+
+  @include element([prev next]) {
+    width: (100 / 7) * 1%;
+  }
+
+  @include element(cell) {
+    display: inline-block;
+    padding: 0 5px;
+    width: (100 / 7) * 1%;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    background-color: $white;
+  }
+
+  @include element(day) {
+    cursor: pointer;
+    transition: all 90ms ease;
+    line-height: 36px;
+
+    &:hover {
+      color: $primary;
+    }
+
+    @include when(weekend) {
+      color: $danger;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    @include when(today) {
+      color: $primary;
+    }
+
+    @include when(selected) {
+      background-color: $primary;
+      color: $white;
+
+      &:hover { color: $white; }
+    }
+
+    @include when(disabled) {
+      cursor: not-allowed;
+      color: $text-secondary-color;
+    }
+  }
+}
