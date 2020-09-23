@@ -15,10 +15,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import UiMessage from '@/components/UiMessage.vue';
 import { UiMessageOptions } from '@/interfaces/Message';
 
 export default defineComponent({
   name: 'UiMessages',
+  components: { UiMessage },
   props: {
     messages: {
       type: Array as PropType<UiMessageOptions[]>,

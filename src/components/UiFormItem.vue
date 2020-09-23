@@ -32,9 +32,11 @@
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue';
+import UiLabel from '@/components/UiLabel.vue';
 
 export default defineComponent({
   name: 'UiFormItem',
+  components: { UiLabel },
   props: {
     label: {
       type: String,

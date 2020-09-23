@@ -43,11 +43,18 @@
 import {
   defineComponent, ref, reactive, watch, PropType,
 } from 'vue';
+import UiUploadDragger from '@/components/UiUploadDragger.vue';
+import UiUploadList from '@/components/UiUploadList.vue';
 import { UiUploadFile } from '@/interfaces/Upload';
 import ajax from '@/lib/ajax';
 
 export default defineComponent({
   name: 'UiUpload',
+  components: {
+    UiUploadDragger,
+    UiUploadList,
+  },
+
   props: {
     action: {
       type: String,
