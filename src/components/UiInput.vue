@@ -111,7 +111,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['update:value', 'input', 'change'],
+  emits: ['update:value', 'input', 'change', 'blur', 'focus'],
 
   setup(props, context) {
     const {
@@ -145,9 +145,14 @@ export default defineComponent({
 
     const focus = ref(false);
     const setFocus = (set: boolean) => focus.value = set;
-    const handleFocus = () => setFocus(true);
-    const handleBlur = () => {
+    const handleFocus = (e: Event) => {
+      setFocus(true);
+      context.emit('focus', e);
+    };
+
+    const handleBlur = (e: Event) => {
       setFocus(false);
+      context.emit('blur', e);
 
       if (typeof props.validator === 'function' && props.validateOn === 'blur') {
         error.value = props.validator();
