@@ -14,6 +14,8 @@
       :disabled="disabled"
       :required="required"
       :use-utc="useUtc"
+      :color="color"
+      :size="size"
       @show-calendar="showCalendar"
       @close-calendar="close"
       @typed-date="setTypedDate"
@@ -131,8 +133,17 @@ export default {
 
     dayCellContent: Function,
     fullMonthName: Boolean,
-    disabledDates: Object,
-    highlighted: Object,
+
+    disabledDates: {
+      type: Object,
+      default: null,
+    },
+
+    highlighted: {
+      type: Object,
+      default: null,
+    },
+
     placeholder: String,
     inline: Boolean,
     mondayFirst: Boolean,
@@ -142,13 +153,25 @@ export default {
     required: Boolean,
     readonly: Boolean,
     useUtc: Boolean,
+
     minimumView: {
       type: String,
       default: 'day',
     },
+
     maximumView: {
       type: String,
       default: 'year',
+    },
+
+    size: {
+      type: String,
+      default: null,
+    },
+
+    color: {
+      type: String,
+      default: null,
     },
   },
   emits: ['changed-year', 'changed-month', 'selected-disabled', 'closed', 'selected', 'input', 'cleared'],
