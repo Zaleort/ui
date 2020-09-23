@@ -5,7 +5,7 @@
       :selected-date="selectedDate"
       :reset-typed-date="resetTypedDate"
       :format="format"
-      :translation="translation"
+      :translation="language"
       :name="name"
       :ref-name="refName"
       :open-date="openDate"
@@ -32,13 +32,12 @@
       :allowed-to-show-view="allowedToShowView"
       :disabled-dates="disabledDates"
       :highlighted="highlighted"
-      :translation="translation"
+      :translation="language"
       :page-timestamp="pageTimestamp"
-      :is-rtl="isRtl"
       :sunday-first="sundayFirst"
       :day-cell-content="dayCellContent"
       :use-utc="useUtc"
-      @changed-month="handleChangedMonthFromDayUiDate"
+      @changed-month="handleChangedMonthFromDay"
       @select-date="selectDate"
       @show-month-calendar="showMonthCalendar"
       @selected-disabled="selectDisabledDate"
@@ -52,8 +51,7 @@
       :show-month-view="showMonthView"
       :allowed-to-show-view="allowedToShowView"
       :disabled-dates="disabledDates"
-      :translation="translation"
-      :is-rtl="isRtl"
+      :translation="language"
       :use-utc="useUtc"
       @select-month="selectMonth"
       @show-year-calendar="showYearCalendar"
@@ -68,8 +66,7 @@
       :show-year-view="showYearView"
       :allowed-to-show-view="allowedToShowView"
       :disabled-dates="disabledDates"
-      :translation="translation"
-      :is-rtl="isRtl"
+      :translation="language"
       :use-utc="useUtc"
       @select-year="selectYear"
       @changed-decade="setPageDate"
@@ -77,7 +74,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import {
+  computed, defineComponent, onMounted, reactive, ref, watch,
+} from 'vue';
 import UiDateInput from '@/components/UiDateInput.vue';
 import UiDateDay from '@/components/UiDateDay.vue';
 import UiDateMonth from '@/components/UiDateMonth.vue';
@@ -85,7 +85,7 @@ import UiDateYear from '@/components/UiDateYear.vue';
 import utils, { makeDateUtils } from '@/lib/date';
 import es from '@/locale/es';
 
-export default {
+export default defineComponent({
   name: 'UiDate',
   components: {
     UiDateInput,
@@ -93,6 +93,7 @@ export default {
     UiDateMonth,
     UiDateYear,
   },
+
   props: {
     value: {
       type: [Date, String, Number],
@@ -117,7 +118,7 @@ export default {
 
     format: {
       type: [String, Function],
-      default: 'dd MMM yyyy',
+      default: 'dd/MM/yyyy',
     },
 
     language: {
@@ -175,307 +176,243 @@ export default {
     },
   },
   emits: ['changed-year', 'changed-month', 'selected-disabled', 'closed', 'selected', 'input', 'cleared'],
-  data() {
-    const startDate = this.openDate ? new Date(this.openDate) : new Date();
-    const constructedDateUtils = makeDateUtils(this.useUtc);
-    const pageTimestamp = constructedDateUtils.setDate(startDate, 1);
-    return {
-      /*
-       * Vue cannot observe changes to a Date Object so date must be stored as a timestamp
-       * This represents the first day of the current viewing month
-       * {Number}
-       */
-      pageTimestamp,
-      /*
-       * Selected Date
-       * {Date}
-       */
-      selectedDate: null,
-      /*
-       * Flags to show calendar views
-       * {Boolean}
-       */
-      showDayView: false,
-      showMonthView: false,
-      showYearView: false,
-      /*
-       * Positioning
-       */
-      calendarHeight: 0,
-      resetTypedDate: new Date(),
-      utils: constructedDateUtils,
-    };
-  },
-  computed: {
-    computedInitialView() {
-      if (!this.initialView) {
-        return this.minimumView;
+
+  setup(props, context) {
+    const dateUtils = makeDateUtils(props.useUtc);
+    const startDate = props.openDate ? new Date(props.openDate) : new Date();
+    const pageTimestamp = ref(dateUtils.setDate(startDate, 1));
+    const pageDate = computed(() => new Date(pageTimestamp.value));
+    const selectedDate = ref<Date | null>(null);
+
+    const computedInitialView = computed(() => (props.initialView ? props.initialView : props.minimumView));
+    const showDayView = ref(false);
+    const showMonthView = ref(false);
+    const showYearView = ref(false);
+    const isOpen = computed(() => showDayView.value || showMonthView.value || showYearView.value);
+
+    let resetTypedDate = new Date();
+    const isInline = computed(() => !!props.inline);
+
+    const close = (emitEvent = false) => {
+      showYearView.value = false;
+      showMonthView.value = false;
+      showDayView.value = false;
+
+      if (!isInline.value) {
+        if (emitEvent) {
+          context.emit('closed');
+        }
       }
-      return this.initialView;
-    },
-    pageDate() {
-      return new Date(this.pageTimestamp);
-    },
-    translation() {
-      return this.language;
-    },
-    calendarStyle() {
-      return {
-        position: this.isInline ? 'static' : undefined,
-      };
-    },
-    isOpen() {
-      return this.showDayView || this.showMonthView || this.showYearView;
-    },
-    isInline() {
-      return !!this.inline;
-    },
-    isRtl() {
-      return this.translation.rtl === true;
-    },
-  },
-  watch: {
-    value(value) {
-      this.setValue(value);
-    },
-    openDate() {
-      this.setPageDate();
-    },
-    initialView() {
-      this.setInitialView();
-    },
-  },
-  mounted() {
-    this.init();
-  },
-  methods: {
-    /**
-     * Called in the event that the user navigates to date pages and
-     * closes the ui-date without selecting a date.
-     */
-    resetDefaultPageDate() {
-      if (this.selectedDate === null) {
-        this.setPageDate();
+    };
+
+    const setPageDate = (date: Date | null = null) => {
+      if (!date) {
+        if (props.openDate) {
+          date = new Date(props.openDate);
+        } else {
+          date = new Date();
+        }
+      }
+      pageTimestamp.value = dateUtils.setDate(new Date(date), 1);
+    };
+
+    const resetDefaultPageDate = () => {
+      if (selectedDate.value === null) {
+        setPageDate();
         return;
       }
-      this.setPageDate(this.selectedDate);
-    },
-    /**
-     * Effectively a toggle to show/hide the calendar
-     * @return {mixed}
-     */
-    showCalendar() {
-      if (this.disabled || this.isInline) {
+
+      setPageDate(selectedDate.value);
+    };
+
+    const allowedToShowView = (view: string) => {
+      const views = ['day', 'month', 'year'];
+      const minimumViewIndex = views.indexOf(props.minimumView);
+      const maximumViewIndex = views.indexOf(props.maximumView);
+      const viewIndex = views.indexOf(view);
+      return viewIndex >= minimumViewIndex && viewIndex <= maximumViewIndex;
+    };
+
+    const showDayCalendar = () => {
+      if (!allowedToShowView('day')) {
         return false;
       }
-      if (this.isOpen) {
-        return this.close(true);
+
+      close();
+      showDayView.value = true;
+      return true;
+    };
+
+    const showMonthCalendar = () => {
+      if (!allowedToShowView('month')) {
+        return false;
       }
 
-      this.setInitialView();
+      close();
+      showMonthView.value = true;
       return true;
-    },
-    /**
-     * Sets the initial ui-date page view: day, month or year
-     */
-    setInitialView() {
-      const initialView = this.computedInitialView;
-      if (!this.allowedToShowView(initialView)) {
-        throw new Error(`initialView '${this.initialView}' cannot be rendered based on minimum '${this.minimumView}' and maximum '${this.maximumView}'`);
+    };
+
+    const showYearCalendar = () => {
+      if (!allowedToShowView('year')) {
+        return false;
+      }
+
+      close();
+      showYearView.value = true;
+      return true;
+    };
+
+    const setInitialView = () => {
+      const initialView = computedInitialView.value;
+      if (!allowedToShowView(initialView)) {
+        throw new Error(`initialView '${props.initialView}' cannot be rendered based on minimum '${props.minimumView}' and maximum '${props.maximumView}'`);
       }
       switch (initialView) {
         case 'year':
-          this.showYearCalendar();
+          showYearCalendar();
           break;
         case 'month':
-          this.showMonthCalendar();
+          showMonthCalendar();
           break;
         default:
-          this.showDayCalendar();
+          showDayCalendar();
           break;
       }
-    },
-    /**
-     * Are we allowed to show a specific ui-date view?
-     * @param {String} view
-     * @return {Boolean}
-     */
-    allowedToShowView(view) {
-      const views = ['day', 'month', 'year'];
-      const minimumViewIndex = views.indexOf(this.minimumView);
-      const maximumViewIndex = views.indexOf(this.maximumView);
-      const viewIndex = views.indexOf(view);
-      return viewIndex >= minimumViewIndex && viewIndex <= maximumViewIndex;
-    },
-    /**
-     * Show the day ui-date
-     * @return {Boolean}
-     */
-    showDayCalendar() {
-      if (!this.allowedToShowView('day')) {
+    };
+
+    const showCalendar = () => {
+      if (props.disabled || isInline.value) {
         return false;
       }
-      this.close();
-      this.showDayView = true;
-      return true;
-    },
-    /**
-     * Show the month ui-date
-     * @return {Boolean}
-     */
-    showMonthCalendar() {
-      if (!this.allowedToShowView('month')) {
-        return false;
+      if (isOpen.value) {
+        return close(true);
       }
-      this.close();
-      this.showMonthView = true;
+
+      setInitialView();
       return true;
-    },
-    /**
-     * Show the year ui-date
-     * @return {Boolean}
-     */
-    showYearCalendar() {
-      if (!this.allowedToShowView('year')) {
-        return false;
-      }
-      this.close();
-      this.showYearView = true;
-      return true;
-    },
-    /**
-     * Set the selected date
-     * @param {Number} timestamp
-     */
-    setDate(timestamp) {
+    };
+
+    const setDate = (timestamp: number) => {
       const date = new Date(timestamp);
-      this.selectedDate = date;
-      this.setPageDate(date);
-      this.$emit('selected', date);
-      this.$emit('input', date);
-    },
-    /**
-     * Clear the selected date
-     */
-    clearDate() {
-      this.selectedDate = null;
-      this.setPageDate();
-      this.$emit('selected', null);
-      this.$emit('input', null);
-      this.$emit('cleared');
-    },
-    /**
-     * @param {Object} date
-     */
-    selectDate(date) {
-      this.setDate(date.timestamp);
-      if (!this.isInline) {
-        this.close(true);
+      selectedDate.value = date;
+      setPageDate(date);
+      context.emit('selected', date);
+      context.emit('input', date);
+    };
+
+    const clearDate = () => {
+      selectedDate.value = null;
+      setPageDate();
+      context.emit('selected', null);
+      context.emit('input', null);
+      context.emit('cleared');
+    };
+
+    const selectDate = (date) => {
+      setDate(date.timestamp);
+      if (!isInline.value) {
+        close(true);
       }
-      this.resetTypedDate = new Date();
-    },
-    /**
-     * @param {Object} date
-     */
-    selectDisabledDate(date) {
-      this.$emit('selected-disabled', date);
-    },
-    /**
-     * @param {Object} month
-     */
-    selectMonth(month) {
+
+      resetTypedDate = new Date();
+    };
+
+    const selectDisabledDate = (date: Date) => {
+      context.emit('selected-disabled', date);
+    };
+
+    const selectMonth = (month: any) => {
       const date = new Date(month.timestamp);
-      if (this.allowedToShowView('day')) {
-        this.setPageDate(date);
-        this.$emit('changed-month', month);
-        this.showDayCalendar();
+      if (allowedToShowView('day')) {
+        setPageDate(date);
+        context.emit('changed-month', month);
+        showDayCalendar();
       } else {
-        this.selectDate(month);
+        selectDate(month);
       }
-    },
-    /**
-     * @param {Object} year
-     */
-    selectYear(year) {
+    };
+
+    const selectYear = (year: any) => {
       const date = new Date(year.timestamp);
-      if (this.allowedToShowView('month')) {
-        this.setPageDate(date);
-        this.$emit('changed-year', year);
-        this.showMonthCalendar();
+      if (allowedToShowView('month')) {
+        setPageDate(date);
+        context.emit('changed-year', year);
+        showMonthCalendar();
       } else {
-        this.selectDate(year);
+        selectDate(year);
       }
-    },
-    /**
-     * Set the dateui-date value
-     * @param {Date|String|Number|null} date
-     */
-    setValue(date) {
+    };
+
+    const setValue = (date: string | number | Date | null) => {
       if (typeof date === 'string' || typeof date === 'number') {
         const parsed = new Date(date);
         date = isNaN(parsed.valueOf()) ? null : parsed;
       }
       if (!date) {
-        this.setPageDate();
-        this.selectedDate = null;
+        setPageDate();
+        selectedDate.value = null;
         return;
       }
-      this.selectedDate = date;
-      this.setPageDate(date);
-    },
-    /**
-     * Sets the date that the calendar should open on
-     */
-    setPageDate(date) {
-      if (!date) {
-        if (this.openDate) {
-          date = new Date(this.openDate);
-        } else {
-          date = new Date();
-        }
-      }
-      this.pageTimestamp = this.utils.setDate(new Date(date), 1);
-    },
-    /**
-     * Handles a month change from the day ui-date
-     */
-    handleChangedMonthFromDayUiDate(date) {
-      this.setPageDate(date);
-      this.$emit('changed-month', date);
-    },
-    /**
-     * Set the date from a typedDate event
-     */
-    setTypedDate(date) {
-      this.setDate(date.getTime());
-    },
-    /**
-     * Close all calendar layers
-     * @param {Boolean} emitEvent - emit close event
-     */
-    close(emitEvent) {
-      this.showYearView = false;
-      this.showMonthView = false;
-      this.showDayView = false;
+      selectedDate.value = date;
+      setPageDate(date);
+    };
 
-      if (!this.isInline) {
-        if (emitEvent) {
-          this.$emit('closed');
-        }
-        document.removeEventListener('click', this.clickOutside, false);
+    const handleChangedMonthFromDay = (date: Date) => {
+      setPageDate(date);
+      context.emit('changed-month', date);
+    };
+
+    const setTypedDate = (date: Date) => {
+      setDate(date.getTime());
+    };
+
+    const init = () => {
+      if (props.value) {
+        setValue(props.value);
       }
-    },
-    /**
-     * Initiate the component
-     */
-    init() {
-      if (this.value) {
-        this.setValue(this.value);
+      if (isInline.value) {
+        setInitialView();
       }
-      if (this.isInline) {
-        this.setInitialView();
-      }
-    },
+    };
+
+    watch(() => props.openDate, () => setPageDate());
+    watch(() => props.value, () => setValue(props.value));
+    watch(() => props.initialView, () => setInitialView());
+
+    onMounted(() => init());
+
+    return {
+      init,
+      dateUtils,
+      pageTimestamp,
+      pageDate,
+      selectedDate,
+      computedInitialView,
+      showDayView,
+      showMonthView,
+      showYearView,
+      isOpen,
+      resetTypedDate,
+      isInline,
+      close,
+      setPageDate,
+      resetDefaultPageDate,
+      allowedToShowView,
+      showCalendar,
+      showDayCalendar,
+      showMonthCalendar,
+      showYearCalendar,
+      setDate,
+      selectDate,
+      clearDate,
+      selectDisabledDate,
+      selectMonth,
+      selectYear,
+      setValue,
+      handleChangedMonthFromDay,
+      setTypedDate,
+    };
   },
-};
+});
 </script>
