@@ -12,6 +12,8 @@
       :disabled="disabled"
       :required="required"
       :readonly="readonly"
+      :color="color"
+      :size="size"
       autocomplete="off"
       @keyup="parseTypedDate"
       @blur="handleBlur"
@@ -67,6 +69,16 @@ export default {
     placeholder: {
       type: String,
       default: 'Selecciona una fecha',
+    },
+
+    size: {
+      type: String,
+      default: null,
+    },
+
+    color: {
+      type: String,
+      default: null,
     },
 
     openDate: Date,

@@ -35,7 +35,7 @@
       :translation="translation"
       :page-timestamp="pageTimestamp"
       :is-rtl="isRtl"
-      :monday-first="mondayFirst"
+      :sunday-first="sundayFirst"
       :day-cell-content="dayCellContent"
       :use-utc="useUtc"
       @changed-month="handleChangedMonthFromDayUiDate"
@@ -136,17 +136,17 @@ export default {
 
     disabledDates: {
       type: Object,
-      default: null,
+      default: () => ({}),
     },
 
     highlighted: {
       type: Object,
-      default: null,
+      default: () => ({}),
     },
 
     placeholder: String,
     inline: Boolean,
-    mondayFirst: Boolean,
+    sundayFirst: Boolean,
     clearButton: Boolean,
     initialView: String,
     disabled: Boolean,

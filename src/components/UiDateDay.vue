@@ -78,7 +78,7 @@ export default {
     disabledDates: Object,
     highlighted: Object,
     translation: Object,
-    mondayFirst: Boolean,
+    sundayFirst: Boolean,
     useUtc: Boolean,
   },
   emits: ['selected-disabled', 'select-date', 'show-month-calendar', 'changed-month'],
@@ -94,11 +94,12 @@ export default {
      * @return {String[]}
      */
     daysOfWeek() {
-      if (this.mondayFirst) {
+      if (this.sundayFirst) {
         const tempDays = this.translation.days.slice();
         tempDays.push(tempDays.shift());
         return tempDays;
       }
+
       return this.translation.days;
     },
     /**
@@ -111,10 +112,10 @@ export default {
       const dObj = this.useUtc
         ? new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1))
         : new Date(d.getFullYear(), d.getMonth(), 1, d.getHours(), d.getMinutes());
-      if (this.mondayFirst) {
-        return this.utils.getDay(dObj) > 0 ? this.utils.getDay(dObj) - 1 : 6;
+      if (this.sundayFirst) {
+        return this.utils.getDay(dObj);
       }
-      return this.utils.getDay(dObj);
+      return this.utils.getDay(dObj) > 0 ? this.utils.getDay(dObj) - 1 : 6;
     },
     /**
      * @return {Object[]}
