@@ -141,7 +141,7 @@ export default {
       ].includes(event.keyCode)) {
         this.input.blur();
       }
-      if (this.readonly) {
+      if (!this.readonly) {
         const typedDate = Date.parse(this.input.value);
         if (!isNaN(typedDate)) {
           this.typedDate = this.input.value;
