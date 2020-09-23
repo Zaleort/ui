@@ -6,7 +6,6 @@
     }"
     @mousedown.prevent
   >
-    <slot name="beforeCalendarHeader" />
     <header class="ui-date__header">
       <span
         class="ui-date__prev"

@@ -1,40 +1,38 @@
 <template>
-  <div @click="showCalendar">
-    <ui-input
-      :id="id"
-      :ref="refName"
-      v-model:value="formattedValue"
-      :type="inline ? 'hidden' : 'text'"
-      :name="name"
-      :open-date="openDate"
-      :placeholder="placeholder"
-      :clear-button="clearable"
-      :disabled="disabled"
-      :required="required"
-      :readonly="readonly"
-      :color="color"
-      :size="size"
-      autocomplete="off"
-      @keyup="parseTypedDate"
-      @blur="handleBlur"
-    >
-      <template #prepend>
-        <slot name="prepend" />
-        <ui-icon icon="calendar" />
-      </template>
+  <ui-input
+    :id="id"
+    :ref="refName"
+    v-model:value="formattedValue"
+    :type="inline ? 'hidden' : 'text'"
+    :name="name"
+    :open-date="openDate"
+    :placeholder="placeholder"
+    :clear-button="clearable"
+    :disabled="disabled"
+    :required="required"
+    :readonly="readonly"
+    :color="color"
+    :size="size"
+    autocomplete="off"
+    @keyup="parseTypedDate"
+    @blur="handleBlur"
+  >
+    <template #prepend>
+      <slot name="prepend" />
+      <ui-icon icon="calendar" />
+    </template>
 
-      <template #append>
-        <slot name="append" />
-        <ui-icon
-          v-if="clearable"
-          v-show="value !== null"
-          icon="timesCircle"
-          class="clickable"
-          @click.stop="clearDate()"
-        />
-      </template>
-    </ui-input>
-  </div>
+    <template #append>
+      <slot name="append" />
+      <ui-icon
+        v-if="clearable"
+        v-show="value !== null"
+        icon="timesCircle"
+        class="clickable"
+        @click.stop="clearDate()"
+      />
+    </template>
+  </ui-input>
 </template>
 <script>
 import { makeDateUtils } from '@/lib/date';
@@ -125,10 +123,6 @@ export default {
   },
 
   methods: {
-    showCalendar() {
-      console.log('show-calendar');
-      this.$emit('show-calendar');
-    },
     /**
      * Attempt to parse a typed date
      * @param {Event} event
@@ -159,7 +153,6 @@ export default {
         this.input.value = null;
         this.typedDate = null;
       }
-      this.$emit('close-calendar');
     },
     /**
      * emit a clearDate event

@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-date">
+  <div v-click-outside="close" class="ui-date">
     <ui-date-input
       :id="id"
       :selected-date="selectedDate"
@@ -16,8 +16,7 @@
       :use-utc="useUtc"
       :color="color"
       :size="size"
-      @show-calendar="showCalendar"
-      @close-calendar="close"
+      @click="showCalendar"
       @typed-date="setTypedDate"
       @clear-date="clearDate"
     />
@@ -76,7 +75,7 @@
 
 <script lang="ts">
 import {
-  computed, defineComponent, onMounted, reactive, ref, watch,
+  computed, defineComponent, onMounted, ref, watch,
 } from 'vue';
 import UiDateInput from '@/components/UiDateInput.vue';
 import UiDateDay from '@/components/UiDateDay.vue';
@@ -132,8 +131,10 @@ export default defineComponent({
       validator: val => utils.validateDateInput(val),
     },
 
-    dayCellContent: Function,
-    fullMonthName: Boolean,
+    fullMonthName: {
+      type: Boolean,
+      default: false,
+    },
 
     disabledDates: {
       type: Object,
@@ -145,15 +146,50 @@ export default defineComponent({
       default: () => ({}),
     },
 
-    placeholder: String,
-    inline: Boolean,
-    sundayFirst: Boolean,
-    clearButton: Boolean,
-    initialView: String,
-    disabled: Boolean,
-    required: Boolean,
-    readonly: Boolean,
-    useUtc: Boolean,
+    placeholder: {
+      type: String,
+      default: 'Seleccione una fecha',
+    },
+
+    inline: {
+      type: Boolean,
+      default: false,
+    },
+
+    sundayFirst: {
+      type: Boolean,
+      default: false,
+    },
+
+    clearButton: {
+      type: Boolean,
+      default: false,
+    },
+
+    initialView: {
+      type: String,
+      default: 'day',
+    },
+
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+
+    required: {
+      type: Boolean,
+      default: false,
+    },
+
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
+
+    useUtc: {
+      type: Boolean,
+      default: false,
+    },
 
     minimumView: {
       type: String,
@@ -175,8 +211,8 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['changed-year', 'changed-month', 'selected-disabled', 'closed', 'selected', 'input', 'cleared'],
 
+  emits: ['changed-year', 'changed-month', 'selected-disabled', 'closed', 'selected', 'input', 'cleared'],
   setup(props, context) {
     const dateUtils = makeDateUtils(props.useUtc);
     const startDate = props.openDate ? new Date(props.openDate) : new Date();
@@ -194,6 +230,7 @@ export default defineComponent({
     const isInline = computed(() => !!props.inline);
 
     const close = (emitEvent = false) => {
+      console.log('close');
       showYearView.value = false;
       showMonthView.value = false;
       showDayView.value = false;
@@ -265,6 +302,7 @@ export default defineComponent({
 
     const setInitialView = () => {
       const initialView = computedInitialView.value;
+      console.log(initialView);
       if (!allowedToShowView(initialView)) {
         throw new Error(`initialView '${props.initialView}' cannot be rendered based on minimum '${props.minimumView}' and maximum '${props.maximumView}'`);
       }
@@ -282,11 +320,12 @@ export default defineComponent({
     };
 
     const showCalendar = () => {
+      console.log('showCalendar');
       if (props.disabled || isInline.value) {
         return false;
       }
       if (isOpen.value) {
-        return close(true);
+        // return close(true);
       }
 
       setInitialView();
@@ -309,7 +348,7 @@ export default defineComponent({
       context.emit('cleared');
     };
 
-    const selectDate = (date) => {
+    const selectDate = (date: any) => {
       setDate(date.timestamp);
       if (!isInline.value) {
         close(true);
