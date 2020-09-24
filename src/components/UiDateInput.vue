@@ -167,7 +167,7 @@ export default defineComponent({
 
       if (props.readonly && isNaN(Date.parse(input.value.value))) {
         clearDate();
-        input.value = null;
+        input.value.value = '';
         typedDate.value = false;
       }
     };
