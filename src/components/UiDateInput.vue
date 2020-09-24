@@ -1,7 +1,7 @@
 <template>
   <ui-input
     :id="id"
-    :ref="refName"
+    ref="input"
     v-model:value="formattedValue"
     :type="inline ? 'hidden' : 'text'"
     :name="name"
@@ -34,21 +34,40 @@
     </template>
   </ui-input>
 </template>
-<script>
+<script lang="ts">
+import {
+  computed, defineComponent, ref, watch,
+} from 'vue';
 import { makeDateUtils } from '@/lib/date';
 
-export default {
+export default defineComponent({
   name: 'UiDateInput',
   props: {
-    selectedDate: Date,
-    resetTypedDate: [Date],
-    format: [String, Function],
+    selectedDate: {
+      type: Date,
+      default: null,
+    },
+
+    resetTypedDate: {
+      type: Date,
+      default: null,
+    },
+
+    format: {
+      type: [String, Function],
+      default: 'dd/MM/yyyy',
+    },
+
     translation: {
       type: Object,
       default: null,
     },
 
-    inline: Boolean,
+    inline: {
+      type: Boolean,
+      default: false,
+    },
+
     id: {
       type: String,
       default: null,
@@ -57,11 +76,6 @@ export default {
     name: {
       type: String,
       default: null,
-    },
-
-    refName: {
-      type: String,
-      default: 'datePicker',
     },
 
     placeholder: {
@@ -80,86 +94,94 @@ export default {
     },
 
     openDate: Date,
-    clearable: Boolean,
-    disabled: Boolean,
-    required: Boolean,
-    readonly: Boolean,
-    useUtc: Boolean,
+    clearable: {
+      type: Boolean,
+      default: false,
+    },
+
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+
+    required: {
+      type: Boolean,
+      default: false,
+    },
+
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
+
+    useUtc: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   emits: ['close-calendar', 'show-calendar', 'clear-date', 'typed-date'],
 
-  data() {
-    const constructedDateUtils = makeDateUtils(this.useUtc);
-    return {
-      input: null,
-      typedDate: false,
-      utils: constructedDateUtils,
-    };
-  },
+  setup(props, context) {
+    const dateUtils = makeDateUtils(props.useUtc);
+    const typedDate = ref<boolean | string>(false);
+    const input = ref<HTMLInputElement | null>(null);
 
-  computed: {
-    formattedValue() {
-      if (!this.selectedDate) {
+    const formattedValue = computed(() => {
+      if (!props.selectedDate) {
         return null;
       }
-      if (this.typedDate) {
-        return this.typedDate;
+      if (typedDate.value) {
+        return typedDate.value;
       }
-      return typeof this.format === 'function'
-        ? this.format(this.selectedDate)
-        : this.utils.formatDate(new Date(this.selectedDate), this.format, this.translation);
-    },
-  },
+      return typeof props.format === 'function'
+        ? props.format(props.selectedDate)
+        : dateUtils.formatDate(new Date(props.selectedDate), props.format, props.translation);
+    });
 
-  watch: {
-    resetTypedDate() {
-      this.typedDate = false;
-    },
-  },
+    const parseTypedDate = (event: KeyboardEvent) => {
+      if (!input.value) return;
 
-  mounted() {
-    this.input = this.$el.querySelector('input');
-  },
-
-  methods: {
-    /**
-     * Attempt to parse a typed date
-     * @param {Event} event
-     */
-    parseTypedDate(event) {
-      // close calendar if escape or enter are pressed
       if ([
-        27, // escape
-        13, // enter
-      ].includes(event.keyCode)) {
-        this.input.blur();
+        'Enter',
+        'Esc',
+        'Escape',
+      ].includes(event.key)) {
+        input.value.blur();
       }
-      if (!this.readonly) {
-        const typedDate = Date.parse(this.input.value);
-        if (!isNaN(typedDate)) {
-          this.typedDate = this.input.value;
-          this.$emit('typed-date', new Date(this.typedDate));
+      if (!props.readonly) {
+        const date = Date.parse(input.value.value);
+        if (!isNaN(date)) {
+          typedDate.value = input.value.value;
+          context.emit('typed-date', new Date(typedDate.value));
         }
       }
-    },
-    /**
-     * nullify the typed date to defer to regular formatting
-     * called once the input is blurred
-     */
-    handleBlur() {
-      if (this.readonly && isNaN(Date.parse(this.input.value))) {
-        this.clearDate();
-        this.input.value = null;
-        this.typedDate = null;
+    };
+
+    const clearDate = () => {
+      context.emit('clear-date');
+    };
+
+    const handleBlur = () => {
+      if (!input.value) return;
+
+      if (props.readonly && isNaN(Date.parse(input.value.value))) {
+        clearDate();
+        input.value = null;
+        typedDate.value = false;
       }
-    },
-    /**
-     * emit a clearDate event
-     */
-    clearDate() {
-      this.$emit('clear-date');
-    },
+    };
+
+    watch(() => props.resetTypedDate, () => typedDate.value = false);
+
+    return {
+      dateUtils,
+      typedDate,
+      formattedValue,
+      parseTypedDate,
+      handleBlur,
+      clearDate,
+    };
   },
-};
+});
 </script>
